@@ -1,19 +1,31 @@
+'use strict';
+
 const webpack = require('webpack');
 const path = require('path');
 
+let env = process.env.NODE_ENV || 'development';
+
+let entry = ['./src'];
+if (env == 'development') {
+  entry.push(
+    'webpack-dev-server/client?http://192.168.162.130:3000',
+    'webpack/hot/dev-server');
+}
+
 module.exports = {
-  entry: [
-    'webpack-dev-server/client?http://192.168.162.128:3000',
-    'webpack/hot/dev-server',
-    './src'
-  ],
+  entry,
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
   },
   module: {
     loaders: [
-      { test: /.js$/, loaders: ['babel'], exclude: /node_modules/ }
+      { test: /\.js$/, loaders: ['babel'], exclude: /node_modules/ },
+      { test: /\.scss$/, loaders: ['style', 'css', 'postcss'], exclude: /node_modules/ },
+      { test: /\.css$/, loaders: ['style', 'css', 'postcss'] },
+      { test: /\.(png|jpg|gif)$/, loader: `url-loader?limit=${8192 * 3}` },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' }
     ]
   },
   plugins: [
