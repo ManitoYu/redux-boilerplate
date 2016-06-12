@@ -1,0 +1,11 @@
+@import '../../extend';
+
+.Button {
+  @extend .inline-block;
+  @extend .rounded-corner;
+  min-width: 120px;
+  height: 40px;
+  color: #333;
+  background-color: #fff;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2);
+}
