@@ -1,0 +1,7 @@
+@import '../../extend';
+
+.Card {
+  @extend .rounded-corner;
+  @extend .shadow-1dp;
+  width: 100%;
+}
