@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import _ from 'lodash'
+import { List, Map } from 'immutable'
 
-function posts(state = [], action) {
+function posts(state = List(), action) {
   switch (action.type) {
     case 'ADD_POST':
-      return [...state, action.post]
+      return state.push(Map({ id: Math.random().toString(36).substr(0, 2), test: action.text }))
     default:
       return state
   }
