@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 
 import {
   Button,
-  Card
+  Card,
+  Divider
 } from '../components'
 
 class App extends Component {
@@ -12,6 +13,7 @@ class App extends Component {
       <div>
         <Button onClick={() => alert()}>Click</Button>
         <Card></Card>
+        <Divider />
       </div>
     )
   }

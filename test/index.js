@@ -8,3 +8,4 @@ global.window = win
 
 import '../src/components/Button/Button.spec.js'
 import '../src/components/Card/Card.spec.js'
+import '../src/components/Divider/Divider.spec.js'

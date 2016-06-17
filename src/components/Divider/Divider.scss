@@ -1,0 +1,14 @@
+.Divider {
+  margin: 1rem 0;
+  
+  div {
+    &:nth-child(1) {
+      background-color: #eeeeee;
+      height: 1px;
+    }
+    &:nth-child(2) {
+      background-color: #f6f6f6;
+      height: 1px;
+    }
+  }
+}
