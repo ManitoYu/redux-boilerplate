@@ -4,7 +4,7 @@ import ChartMonitor from 'redux-devtools-chart-monitor'
 import DockMonitor from 'redux-devtools-dock-monitor'
 
 export default createDevTools(
-  <DockMonitor toggleVisibilityKey="alt-1" changePositionKey="alt-2">
+  <DockMonitor toggleVisibilityKey="alt-1" changePositionKey="alt-2" defaultIsVisible={false}>
     <ChartMonitor theme='tomorrow' />
   </DockMonitor>
 )
