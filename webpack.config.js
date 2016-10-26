@@ -1,23 +1,39 @@
-'use strict';
+'use strict'
 
-const webpack = require('webpack');
-const path = require('path');
+const webpack = require('webpack')
+const path = require('path')
+const autoprefixer = require('autoprefixer')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
 
-let env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'development'
 
-let entry = ['./src'];
-if (env == 'development') {
-  entry.push(
-    'webpack-dev-server/client?http://192.168.1.112:3000',
-    'webpack/hot/dev-server');
+const configs = {
+  development: {
+    entry: [
+      './src',
+      'webpack-dev-server/client?http://192.168.1.112:3000',
+      'webpack/hot/dev-server'
+    ],
+    output: {
+      path: path.join(__dirname, 'dist'),
+      filename: 'bundle.js'
+    }
+  },
+  production: {
+    entry: [
+      './src'
+    ],
+    output: {
+      path: path.join(__dirname, 'dist'),
+      filename: 'bundle.gzjs'
+    }
+  }
 }
 
 module.exports = {
-  entry,
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-  },
+  entry: configs[env].entry,
+  output: configs[env].output,
   module: {
     loaders: [
       { test: /\.js$/, loaders: ['babel'], exclude: /node_modules/ },
@@ -28,11 +44,28 @@ module.exports = {
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' }
     ]
   },
+  postcss: [autoprefixer],
   plugins: [
-    // new webpack.DefinePlugin({
-    //   'process.env': { NODE_ENV: '"production"' }
-    // })
+    new HtmlWebpackPlugin({
+      hash: true,
+      template: './src/index.html',
+      minify: {
+        collapseBooleanAttributes: true,
+        collapseWhitespace: true
+      }
+    }),
+    new CompressionPlugin({
+      asset: 'bundle.gzjs',
+      algorithm: 'gzip',
+      test: /\.gzjs$/,
+      threshold: 10240,
+      minRatio: 0.8
+    }),
+    new webpack.DefinePlugin({
+      'process.env': { NODE_ENV: JSON.stringify(env) }
+    }),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
   ]
 }
