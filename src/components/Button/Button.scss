@@ -14,4 +14,8 @@
   &:hover {
     @extend .shadow-5dp;
   }
+
+  &.is-disabled {
+    pointer-events: none;
+  }
 }
