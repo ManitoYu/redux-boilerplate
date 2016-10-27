@@ -1,4 +1,22 @@
 .Image {
   display: inline-block;
   vertical-align: middle;
+
+  &--cover, &--contain, &--scale {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+  }
+
+  &--scale {
+    background-size: 100% 100%;
+  }
+
+  &--cover {
+    background-size: cover;
+  }
+
+  &--contain {
+    background-size: contain;
+  }
 }

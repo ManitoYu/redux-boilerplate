@@ -10,6 +10,10 @@ export default class Image extends Component {
   }
 }
 
+Image.defaultProps = {
+  named: 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==',
+}
+
 Image.propTypes = {
   named: PropTypes.string
 }
