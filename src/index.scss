@@ -3,6 +3,7 @@
   padding: 0;
   font-size: 14px;
   font-family: "microsoft yahei";
+  line-height: 1.4;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -29,4 +30,11 @@ button {
 
 ul {
   list-style-type: none;
+}
+
+.page-enter {
+  animation: slideInRight .6s;
+}
+.page-leave {
+  animation: slideOutRight .6s;
 }

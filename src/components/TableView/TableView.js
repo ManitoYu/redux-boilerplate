@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import ScrollView from '../ScrollView'
-import TableViewController from './TableViewController'
+import TableViewController from '../TableViewController'
 
 export default class TableView extends ScrollView {
   constructor(props) {

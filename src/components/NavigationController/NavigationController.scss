@@ -1,0 +1,8 @@
+.NavigationController {
+  > .View {
+    display: none;
+  }
+  > .View:last-child {
+    display: block;
+  }
+}

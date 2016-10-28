@@ -7,6 +7,11 @@ import ImageView from './ImageView'
 import TableView from './TableView'
 import TableViewCell from './TableViewCell'
 import ScrollView from './ScrollView'
+import TableViewController from './TableViewController'
+import ViewController from './ViewController'
+import NavigationController from './NavigationController'
+import Window from './Window'
+import TabBarController from './TabBarController'
 
 export {
   Button,
@@ -17,5 +22,10 @@ export {
   ImageView,
   TableView,
   TableViewCell,
-  ScrollView
+  ScrollView,
+  TableViewController,
+  ViewController,
+  NavigationController,
+  TabBarController,
+  Window
 }

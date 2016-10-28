@@ -34,7 +34,7 @@ export default class ImageView extends View {
                 'Image--contain': contentMode == ImageViewContentModeContain
               })
             }
-            style={{ backgroundImage: `url(${image.props.named })` }} />
+            style={{ backgroundImage: `url(${image.props.named})` }} />
       }
       </View>
     )

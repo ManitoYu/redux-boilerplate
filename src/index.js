@@ -1,5 +1,6 @@
 import 'babel-polyfill'
 import './index.scss'
+import 'animate.css'
 
 import React from 'react'
 import { render } from 'react-dom'

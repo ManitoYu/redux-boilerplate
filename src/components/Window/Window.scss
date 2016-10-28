@@ -1,0 +1,13 @@
+@import '../../extend';
+
+.Window {
+  position: fixed;
+  @extend .scale-to-fill;
+
+  span > .View {
+    @extend .shadow-9dp;
+    @extend .scale-to-fill;
+    position: absolute;
+    background-color: #fff;
+  }
+}
