@@ -1,8 +1,39 @@
+@import '../../extend';
+
 .NavigationController {
-  > .View {
-    display: none;
+  height: 100%;
+  position: relative;
+  padding-top: 64px;
+
+  .NavigationController-views {
+    position: relative;
+    height: 100%;
   }
-  > .View:last-child {
-    display: block;
+
+  .NavigationController-views > .View {
+    @extend .shadow-9dp;
+    @extend .scale-to-fill;
+    display: none;
+    overflow: auto;
+    position: absolute;
+    background-color: #fff;
+
+    &:first-child {
+      display: block;
+      z-index: 999;
+
+      & + .View {
+        display: block;
+        z-index: 99;
+      }
+
+      &.page-enter + .View {
+        animation: slideOutRight .6s;
+      }
+
+      &.page-leave + .View {
+        animation: slideInRight .6s;
+      }
+    }
   }
 }

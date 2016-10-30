@@ -1,5 +1,8 @@
 import React, { PropTypes } from 'react'
 import ViewController from '../ViewController'
+import View from '../View'
+import TabBar from '../TabBar'
+import TabBarItem from '../TabBarItem'
 
 export default class TabBarController extends ViewController {
   constructor(props) {
@@ -10,6 +13,11 @@ export default class TabBarController extends ViewController {
     )
     this.selectedViewController = null
     this.selectedIndex = -1
+    this.tabBar = <TabBar
+      items={this.viewControllers.reverse().map((c, k) =>
+        <TabBarItem key={k} />
+      )}
+    />
 
     if (this.viewControllers.length > 0) {
       this.selectedViewController = this.viewControllers[0]
@@ -28,7 +36,12 @@ export default class TabBarController extends ViewController {
   }
 
   render() {
-    return React.createElement(this.selectedViewController.type, this.selectedViewController.props)
+    return (
+      <View className="TabBarController">
+        {React.createElement(this.selectedViewController.type, this.selectedViewController.props)}
+        {this.tabBar}
+      </View>
+    )
   }
 }
 

@@ -12,6 +12,12 @@ import ViewController from './ViewController'
 import NavigationController from './NavigationController'
 import Window from './Window'
 import TabBarController from './TabBarController'
+import NavigationBar from './NavigationBar'
+import Control from './Control'
+import TabBar from './TabBar'
+import Label from './Label'
+import BarItem from './BarItem'
+import TabBarItem from './TabBarItem'
 
 export {
   Button,
@@ -27,5 +33,11 @@ export {
   ViewController,
   NavigationController,
   TabBarController,
-  Window
+  Window,
+  NavigationBar,
+  Control,
+  TabBar,
+  Label,
+  BarItem,
+  TabBarItem
 }

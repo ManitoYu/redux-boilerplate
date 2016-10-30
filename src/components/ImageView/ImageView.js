@@ -8,7 +8,7 @@ import {
   ImageViewContentModeScale,
   ImageViewContentModeCover,
   ImageViewContentModeContain
-} from './enums'
+} from './constants'
 
 export default class ImageView extends View {
   constructor(props) {

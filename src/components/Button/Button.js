@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
+import Control from '../Control'
 
-export default class Button extends Component {
+export default class Button extends Control {
   render() {
     const { children, onClick, style, className, enabled } = this.props
 

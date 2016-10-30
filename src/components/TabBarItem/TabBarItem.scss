@@ -1,5 +1,6 @@
 @import '../../extend';
 
-.ImageView {
+.TabBarItem {
   @extend .inline-block;
+  height: 100%;
 }
