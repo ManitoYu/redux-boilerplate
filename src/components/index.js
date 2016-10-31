@@ -18,6 +18,7 @@ import TabBar from './TabBar'
 import Label from './Label'
 import BarItem from './BarItem'
 import TabBarItem from './TabBarItem'
+import Responder from './Responder'
 
 export {
   Button,
@@ -39,5 +40,6 @@ export {
   TabBar,
   Label,
   BarItem,
-  TabBarItem
+  TabBarItem,
+  Responder
 }

@@ -2,26 +2,29 @@ import React, { PropTypes } from 'react'
 import ViewController from '../ViewController'
 import View from '../View'
 import TabBar from '../TabBar'
-import TabBarItem from '../TabBarItem'
 
 export default class TabBarController extends ViewController {
   constructor(props) {
     super(props)
 
-    this.viewControllers = props.viewControllers.map(
-      c => React.createElement(c.type, Object.assign({}, c.props, { tabBarController: this }))
-    )
     this.selectedViewController = null
     this.selectedIndex = -1
+
+    this.viewControllers = props.viewControllers.map(
+      (c, k) => React.createElement(c.type, Object.assign({ key: k, tabBarController: this }, c.props))
+    )
     this.tabBar = <TabBar
-      items={this.viewControllers.reverse().map((c, k) =>
-        <TabBarItem key={k} />
+      items={this.viewControllers.map((c, k) =>
+        React.createElement(c.props.tabBarItem.type, Object.assign({}, c.props.tabBarItem.props, {
+          key: k,
+          onClick: () => this.setSelectedIndex(k)
+        }))
       )}
     />
 
-    if (this.viewControllers.length > 0) {
-      this.selectedViewController = this.viewControllers[0]
+    if (props.viewControllers.length > 0) {
       this.selectedIndex = 0
+      this.selectedViewController = this.viewControllers[this.selectedIndex]
     }
   }
 
@@ -38,7 +41,13 @@ export default class TabBarController extends ViewController {
   render() {
     return (
       <View className="TabBarController">
-        {React.createElement(this.selectedViewController.type, this.selectedViewController.props)}
+        <View className="TabBarController-views">
+        {
+          this.viewControllers.map((e, k) =>
+            <View key={k} isHidden={k != this.selectedIndex}>{e}</View>
+          )
+        }
+        </View>
         {this.tabBar}
       </View>
     )

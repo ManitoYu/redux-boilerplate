@@ -1,17 +1,26 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import classnames from 'classnames'
+import Responder from '../Responder'
 
-export default class View extends Component {
+export default class View extends Responder {
+  constructor(props) {
+    super(props)
+  }
+
   render() {
-    const { children, width, height, className, clipsToBounds } = this.props
+    const { children, width, height, className, clipsToBounds, onClick, isHidden } = this.props
 
     let style = {}
     if (width) style.width = `${width}px`
     if (height) style.height = `${height}px`
     if (clipsToBounds) style.overflow = 'hidden'
+    if (isHidden) style.display = 'none'
 
     return (
-      <div className={classnames('View', className)} style={style}>{children}</div>
+      <div
+        className={classnames('View', className)}
+        style={style}
+        onClick={onClick}>{children}</div>
     )
   }
 }
@@ -27,5 +36,6 @@ View.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   className: PropTypes.string,
-  clipsToBounds: PropTypes.bool
+  clipsToBounds: PropTypes.bool,
+  isHidden: PropTypes.bool
 }

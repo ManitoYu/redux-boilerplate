@@ -63,7 +63,7 @@ export default class NavigationController extends ViewController {
     )
 
     return (
-      <View className="NavigationController">
+      <View className="NavigationController" {...this.props}>
         {! this._isNavigationBarHidden && this.navigationBar}
         <ReactCSSTransitionGroup
           component="div"

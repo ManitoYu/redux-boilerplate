@@ -1,6 +1,8 @@
-@import '../../extend';
-
 .TabBarItem {
-  @extend .inline-block;
   height: 100%;
+  display: table-cell;
+  width: 1%;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
 }
