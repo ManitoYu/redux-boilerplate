@@ -13,14 +13,15 @@ export default class TabBarController extends ViewController {
     this.viewControllers = props.viewControllers.map(
       (c, k) => React.createElement(c.type, Object.assign({ key: k, tabBarController: this }, c.props))
     )
-    this.tabBar = <TabBar
-      items={this.viewControllers.map((c, k) =>
-        React.createElement(c.props.tabBarItem.type, Object.assign({}, c.props.tabBarItem.props, {
-          key: k,
-          onClick: () => this.setSelectedIndex(k)
-        }))
-      )}
-    />
+
+    // tabBar
+    let items = this.viewControllers.map((c, k) =>
+      React.createElement(c.props.tabBarItem.type, Object.assign({}, c.props.tabBarItem.props, {
+        key: k,
+        onClick: () => this.setSelectedIndex(k)
+      }))
+    )
+    this.tabBar = <TabBar items={items} />
 
     if (props.viewControllers.length > 0) {
       this.selectedIndex = 0

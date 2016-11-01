@@ -34,7 +34,9 @@ ul {
 
 .page-enter {
   animation: slideInRight .6s;
+  animation-fill-mode: forwards;
 }
 .page-leave {
   animation: slideOutRight .6s;
+  animation-fill-mode: forwards;
 }

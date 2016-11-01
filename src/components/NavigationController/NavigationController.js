@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import createHistory from 'history/createBrowserHistory'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import ViewController from '../ViewController'
@@ -11,8 +11,9 @@ export default class NavigationController extends ViewController {
 
     this.viewControllers = []
     this.topViewController = null
-    this.navigationBar = <NavigationBar />
+    this.navigationBar = null
     this._isNavigationBarHidden = false
+    this.navigationItems = []
 
     this.history = createHistory()
     this.history.listen((location, action) => {
@@ -20,6 +21,7 @@ export default class NavigationController extends ViewController {
 
     if (props.rootViewController) {
       this.viewControllers.unshift(props.rootViewController)
+      this.topViewController = props.rootViewController
     }
   }
 
@@ -27,7 +29,7 @@ export default class NavigationController extends ViewController {
     this.viewControllers.unshift(controller)
     this.topViewController = this.viewControllers[0]
 
-    this.history.push(url)
+    url && this.history.push(url)
     this.forceUpdate()
   }
 
@@ -54,17 +56,27 @@ export default class NavigationController extends ViewController {
     this.forceUpdate()
   }
 
+  registerNavigationItem(index, navigationItem) {
+    this.navigationItems[index] = navigationItem
+  }
+
+  componentDidMount() {
+    this.forceUpdate()
+  }
+
   render() {
     this.viewControllers = this.viewControllers.map((c, k) =>
-      React.createElement(c.type, Object.assign({}, c.props, {
-        key: c.key || Math.random().toString(36).slice(2),
-        navigationController: this
-      }))
+      React.cloneElement(c, {
+        key: c.key || this.viewControllers.length - 1 - k,
+        navigationController: this,
+        registerNavigationItem: this.registerNavigationItem.bind(this, this.viewControllers.length - 1 - k)
+      })
     )
 
     return (
-      <View className="NavigationController" {...this.props}>
-        {! this._isNavigationBarHidden && this.navigationBar}
+      <View className="NavigationController">
+        {! this._isNavigationBarHidden
+          && <NavigationBar navigationItem={this.navigationItems[0]} />}
         <ReactCSSTransitionGroup
           component="div"
           className="NavigationController-views"
