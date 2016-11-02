@@ -1,7 +1,14 @@
-import { Component } from 'react'
+import React from 'react'
+import View from '../View'
 
-export default class ViewController extends Component {
+export default class ViewController extends View {
   render() {
-    throw new Error('you should implement the render method')
+    const { children } = this.props
+
+    return (
+      <View className="ViewController">
+      {children}
+      </View>
+    )
   }
 }

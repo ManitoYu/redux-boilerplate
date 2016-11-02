@@ -22,6 +22,15 @@ import Responder from './Responder'
 import BarButtonItem from './BarButtonItem'
 import Toolbar from './Toolbar'
 import NavigationItem from './NavigationItem'
+import Touch from './Touch'
+import {
+  LongPressGestureRecognizer,
+  PanGestureRecognizer,
+  PinchGestureRecognizer,
+  RotationGestureRecognizer,
+  SwipeGestureRecognizer,
+  TapGestureRecognizer
+} from './GestureRecognizer'
 
 export {
   Button,
@@ -47,5 +56,12 @@ export {
   Responder,
   BarButtonItem,
   Toolbar,
-  NavigationItem
+  NavigationItem,
+  Touch,
+  LongPressGestureRecognizer,
+  PanGestureRecognizer,
+  PinchGestureRecognizer,
+  RotationGestureRecognizer,
+  SwipeGestureRecognizer,
+  TapGestureRecognizer
 }

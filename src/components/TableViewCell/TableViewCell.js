@@ -4,10 +4,6 @@ import View from '../View'
 import Divider from '../Divider'
 
 export default class TableViewCell extends View {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const { children } = this.props
 

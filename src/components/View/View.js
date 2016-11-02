@@ -3,12 +3,8 @@ import classnames from 'classnames'
 import Responder from '../Responder'
 
 export default class View extends Responder {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
-    const { children, width, height, className, clipsToBounds, onClick, isHidden } = this.props
+    const { children, width, height, className, clipsToBounds, isHidden } = this.props
 
     let style = {}
     if (width) style.width = `${width}px`
@@ -17,10 +13,11 @@ export default class View extends Responder {
     if (isHidden) style.display = 'none'
 
     return (
-      <div
-        className={classnames('View', className)}
-        style={style}
-        onClick={onClick}>{children}</div>
+      <Responder {...this.props}>
+        <div className={classnames('View', className)} style={style}>
+        {children}
+        </div>
+      </Responder>
     )
   }
 }
@@ -28,7 +25,8 @@ export default class View extends Responder {
 View.defaultProps = {
   width: 0,
   height: 0,
-  clipsToBounds: false
+  clipsToBounds: false,
+  gestureRecognizers: []
 }
 
 View.propTypes = {
@@ -37,5 +35,6 @@ View.propTypes = {
   height: PropTypes.number,
   className: PropTypes.string,
   clipsToBounds: PropTypes.bool,
-  isHidden: PropTypes.bool
+  isHidden: PropTypes.bool,
+  gestureRecognizers: PropTypes.array
 }

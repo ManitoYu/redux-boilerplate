@@ -1,13 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import classnames from 'classnames'
 import ScrollView from '../ScrollView'
 import TableViewController from '../TableViewController'
 
 export default class TableView extends ScrollView {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const { dataSource, className } = this.props
 
@@ -26,7 +22,7 @@ export default class TableView extends ScrollView {
 }
 
 TableView.defaultProps = {
-  dataSource: new TableViewController
+  dataSource: null
 }
 
 TableView.PropTypes = {

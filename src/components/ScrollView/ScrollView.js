@@ -1,12 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import classnames from 'classnames'
 import View from '../View'
 
 export default class ScrollView extends View {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const { children, className } = this.props
 
@@ -20,5 +16,8 @@ export default class ScrollView extends View {
 
 ScrollView.propTypes = {
   children: PropTypes.node,
-  className: PropTypes.string
+  className: PropTypes.string,
+  isScrollEnabled: PropTypes.bool,
+  isPagingEnabled: PropTypes.bool,
+  delegate: PropTypes.object
 }

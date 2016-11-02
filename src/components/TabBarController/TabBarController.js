@@ -11,12 +11,12 @@ export default class TabBarController extends ViewController {
     this.selectedIndex = -1
 
     this.viewControllers = props.viewControllers.map(
-      (c, k) => React.createElement(c.type, Object.assign({ key: k, tabBarController: this }, c.props))
+      (c, k) => React.cloneElement(c, Object.assign({ key: k, tabBarController: this }, c.props))
     )
 
     // tabBar
     let items = this.viewControllers.map((c, k) =>
-      React.createElement(c.props.tabBarItem.type, Object.assign({}, c.props.tabBarItem.props, {
+      React.cloneElement(c.props.tabBarItem, Object.assign({}, c.props.tabBarItem.props, {
         key: k,
         onClick: () => this.setSelectedIndex(k)
       }))

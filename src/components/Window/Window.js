@@ -3,10 +3,6 @@ import View from '../View'
 import ViewController from '../ViewController'
 
 export default class Window extends View {
-  constructor(props) {
-    super()
-  }
-
   render() {
     const { rootViewController } = this.props
 
