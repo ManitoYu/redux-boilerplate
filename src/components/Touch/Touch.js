@@ -5,25 +5,18 @@ export default class Touch {
     this.timestamp = options.timestamp
 
     this.locations = []
-
-    this.location = {
-      x: 0,
-      y: 0
-    }
   }
 
   update(nextProps) {
     this.timestamp = nextProps.timestamp
-    this.location.x = nextProps.location.x
-    this.location.y = nextProps.location.y
-    this.locations.push(Object.assign({}, this.location))
+    this.locations.push(nextProps.location)
   }
 
   locationInView(view) {
-
+    return this.location[this.locations.length - 1]
   }
 
   previousLocation(view) {
-
+    return this.locations[this.locations.length - 2]
   }
 }

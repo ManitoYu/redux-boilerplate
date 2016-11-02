@@ -14,9 +14,4 @@ export default class PanGestureRecognizer extends GestureRecognizer {
       this.action()
     }
   }
-
-  computeRatio(a, b) {
-    if (! a || ! b) return []
-    return (a.y - b.y) / (a.x - b.x)
-  }
 }

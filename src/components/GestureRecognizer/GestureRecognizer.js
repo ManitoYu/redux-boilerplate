@@ -38,10 +38,7 @@ export default class GestureRecognizer extends Component {
     this.touchStates = this.touchStates | GestureRecognizerStateChanged
     this.numberOfTouches[0].update({
       timestamp: Date.now(),
-      location: {
-        x: e.pageX,
-        y: e.pageY
-      }
+      location: [e.pageX, e.pageY]
     })
     if (this.evaluate()) {
       this.gestureType = PanGestureRecognizer
@@ -60,16 +57,26 @@ export default class GestureRecognizer extends Component {
   }
 
   evaluate() {
-    // let locations = this.numberOfTouches[0].locations
-    //
-    // let ratios = locations.reduce((s, v, k, a) => s.concat(this.computeRatio(a[k + 1], a[k])), [])
-    //
-    // let rads = ratios
-    //   .map(r => Math.atanh(r) / 3.14 * 180)
-    //   .filter(r => r != Infinity && r != -Infinity && ! isNaN(r))
-    //
-    // return Math.max.apply(null, rads) - Math.min.apply(null, rads) > 90
-    return true
+    let locations = this.numberOfTouches[0].locations
+
+    let ratios = locations.reduce((s, v, k, a) => s.concat(this.computeRatio(a[k], a[k + 1])), [])
+
+    let rads = ratios
+      .filter(r => ! isNaN(r))
+      .map(r => {
+        if (r == Infinity) return 0.5 // 向下90度
+        if (r == -Infinity) return -0.5 // 向上90度
+        return Math.tanh(r) / Math.PI
+      })
+
+    if (rads.length <= 1) return false
+
+    return Math.max.apply(null, rads) - Math.min.apply(null, rads) < .5
+  }
+
+  computeRatio(a, b) {
+    if (! a || ! b) return []
+    return (b[1] - a[1]) / (b[0] - a[0])
   }
 
   render() {
