@@ -13,6 +13,7 @@ export default class GestureRecognizer extends Component {
     this.numberOfTouches = []
     this.gestureState = 0
     this.gestureType = null
+    this.rads = []
   }
 
   touchesBegan(e) {
@@ -25,6 +26,8 @@ export default class GestureRecognizer extends Component {
     if (! (this.gestureState & GestureRecognizerStateBegan)) return
     this.gestureState |= GestureRecognizerStateChanged
     this.moved(e)
+    this.evaluate() && this.action(this)
+    if (e.buttons == 0) this.touchesEnded(e)
   }
 
   touchesEnded(e) {
@@ -34,29 +37,31 @@ export default class GestureRecognizer extends Component {
     this.gestureState &= ~GestureRecognizerStateChanged
     this.gestureState |= GestureRecognizerStateEnded
     this.ended(e)
+    this.action(this)
+    this.rads = []
   }
 
-  evaluate() {
-    let locations = this.numberOfTouches[0].locations
+  computeRads() {
+    let ratio = this.computeRatio(
+      this.numberOfTouches[0].previousLocation(),
+      this.numberOfTouches[0].location()
+    )
 
-    let ratios = locations.reduce((s, v, k, a) => s.concat(this.computeRatio(a[k], a[k + 1])), [])
+    if (isNaN(ratio)) return 0
 
-    let rads = ratios
-      .filter(r => ! isNaN(r))
-      .map(r => {
-        if (r == Infinity) return 0.5 // 向下90度
-        if (r == -Infinity) return -0.5 // 向上90度
-        return Math.tanh(r) / Math.PI
-      })
-
-    if (rads.length <= 1) return false
-
-    return Math.max.apply(null, rads) - Math.min.apply(null, rads) < .5
+    if (ratio == Infinity) this.rads.push(0.5) // 向下90度
+    if (ratio == -Infinity) this.rads.push(-0.5) // 向上90度
+    this.rads.push(Math.tanh(ratio) / Math.PI)
   }
 
   computeRatio(a, b) {
-    if (! a || ! b) return []
+    if (! a || ! b) return NaN
     return (b.y - a.y) / (b.x - a.x)
+  }
+
+  evaluate() {
+    this.computeRads()
+    return this.estimate()
   }
 
   render() {

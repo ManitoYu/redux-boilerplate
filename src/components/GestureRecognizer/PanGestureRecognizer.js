@@ -18,7 +18,7 @@ export default class PanGestureRecognizer extends GestureRecognizer {
   }
 
   began(e) {
-    this.numberOfTouches.push(new Touch())
+    this.numberOfTouches = [new Touch()]
     this.moved(e)
   }
 
@@ -26,27 +26,27 @@ export default class PanGestureRecognizer extends GestureRecognizer {
     let touch = this.numberOfTouches[0]
     touch.update(e)
 
+    if (touch.locations.length <= 1) return
+
+    let prevLocation = touch.previousLocation()
+    let curLocation = touch.location()
+
     this.translation = {
       x: e.pageX - touch.originalLocation().x,
       y: e.pageY - touch.originalLocation().y
     }
 
-    if (touch.locations.length > 1) {
-      let prevLocation = touch.previousLocation()
-      let curLocation = touch.location()
-
-      this.velocity = {
-        x: (curLocation.x - prevLocation.x) / (curLocation.t - prevLocation.t),
-        y: (curLocation.y - prevLocation.y) / (curLocation.t - prevLocation.t)
-      }
+    this.velocity = {
+      x: (curLocation.x - prevLocation.x) / (curLocation.t - prevLocation.t),
+      y: (curLocation.y - prevLocation.y) / (curLocation.t - prevLocation.t)
     }
-
-    if (this.evaluate()) this.action(this)
   }
 
   ended(e) {
     this.moved(e)
-    this.action(this)
-    this.numberOfTouches.pop()
+  }
+
+  estimate() {
+    return this.rads.reduce((a, v) => a += v / this.rads.length, 0) < .5
   }
 }
