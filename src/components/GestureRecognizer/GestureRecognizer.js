@@ -14,6 +14,10 @@ export default class GestureRecognizer extends Component {
     this.gestureState = 0
     this.gestureType = null
     this.rads = []
+
+    // frequency control
+    this.interval = 1
+    this.intervalSteps = this.interval
   }
 
   touchesBegan(e) {
@@ -22,7 +26,18 @@ export default class GestureRecognizer extends Component {
     this.began(e)
   }
 
+  shouldSample() {
+    if (this.intervalSteps > 0) {
+      this.intervalSteps --
+      return false
+    }
+    this.intervalSteps = this.interval
+    return true
+  }
+
   touchesMoved(e) {
+    if (! this.shouldSample()) return
+
     if (! (this.gestureState & GestureRecognizerStateBegan)) return
     this.gestureState |= GestureRecognizerStateChanged
     this.moved(e)
