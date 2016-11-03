@@ -5,55 +5,35 @@ import {
   GestureRecognizerStateEnded
 } from './constants'
 
-import {
-  LongPressGestureRecognizer,
-  PanGestureRecognizer,
-  PinchGestureRecognizer,
-  RotationGestureRecognizer,
-  SwipeGestureRecognizer,
-  TapGestureRecognizer
-} from './index'
-
-import Touch from '../Touch'
-
 export default class GestureRecognizer extends Component {
   constructor(props) {
     super(props)
 
     this.view = null
     this.numberOfTouches = []
-    this.touchStates = 0
-
+    this.gestureState = 0
     this.gestureType = null
   }
 
   touchesBegan(e) {
-    this.touchStates = this.touchStates & ~GestureRecognizerStateEnded
-    this.touchStates = this.touchStates | GestureRecognizerStateBegan
-    this.numberOfTouches.push(new Touch({ timestamp: Date.now() }))
+    this.gestureState &= ~GestureRecognizerStateEnded
+    this.gestureState |= GestureRecognizerStateBegan
+    this.began(e)
   }
 
   touchesMoved(e) {
-    if (! (this.touchStates & GestureRecognizerStateBegan)) return
-    this.touchStates = this.touchStates | GestureRecognizerStateChanged
-    this.numberOfTouches[0].update({
-      timestamp: Date.now(),
-      location: [e.pageX, e.pageY]
-    })
-    if (this.evaluate()) {
-      this.gestureType = PanGestureRecognizer
-    } else {
-      this.gestureType = null
-    }
-    this.trigger(this.gestureType)
+    if (! (this.gestureState & GestureRecognizerStateBegan)) return
+    this.gestureState |= GestureRecognizerStateChanged
+    this.moved(e)
   }
 
   touchesEnded(e) {
-    if (! (this.touchStates | GestureRecognizerStateBegan)) return
-    this.touchStates = this.touchStates & ~GestureRecognizerStateBegan
-    this.touchStates = this.touchStates & ~GestureRecognizerStateChanged
-    this.touchStates = this.touchStates | GestureRecognizerStateEnded
-    this.numberOfTouches.pop()
+    if (! (this.gestureState & GestureRecognizerStateBegan)) return
+    if (this.gestureState & GestureRecognizerStateEnded) return
+    this.gestureState &= ~GestureRecognizerStateBegan
+    this.gestureState &= ~GestureRecognizerStateChanged
+    this.gestureState |= GestureRecognizerStateEnded
+    this.ended(e)
   }
 
   evaluate() {
@@ -76,7 +56,7 @@ export default class GestureRecognizer extends Component {
 
   computeRatio(a, b) {
     if (! a || ! b) return []
-    return (b[1] - a[1]) / (b[0] - a[0])
+    return (b.y - a.y) / (b.x - a.x)
   }
 
   render() {

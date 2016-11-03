@@ -4,13 +4,14 @@ import Responder from '../Responder'
 
 export default class View extends Responder {
   render() {
-    const { children, width, height, className, clipsToBounds, isHidden } = this.props
+    const { children, width, height, className, clipsToBounds, isHidden, top } = this.props
 
     let style = {}
     if (width) style.width = `${width}px`
     if (height) style.height = `${height}px`
     if (clipsToBounds) style.overflow = 'hidden'
     if (isHidden) style.display = 'none'
+    if (top) style.top = `${top}px`
 
     return (
       <Responder {...this.props}>

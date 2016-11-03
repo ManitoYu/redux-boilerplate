@@ -1,22 +1,30 @@
 export default class Touch {
-  constructor(options) {
+  constructor() {
     this.view = null
     this.window = null
-    this.timestamp = options.timestamp
+    this.timestamp = 0
 
     this.locations = []
   }
 
-  update(nextProps) {
-    this.timestamp = nextProps.timestamp
-    this.locations.push(nextProps.location)
+  update(e) {
+    this.timestamp = Date.now()
+    this.locations.push({
+      t: this.timestamp,
+      x: e.pageX,
+      y: e.pageY
+    })
   }
 
-  locationInView(view) {
-    return this.location[this.locations.length - 1]
+  location() {
+    return this.locations[this.locations.length - 1]
   }
 
-  previousLocation(view) {
+  previousLocation() {
     return this.locations[this.locations.length - 2]
+  }
+
+  originalLocation() {
+    return this.locations[0]
   }
 }

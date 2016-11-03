@@ -7,6 +7,7 @@ import {
   SwipeGestureRecognizer,
   TapGestureRecognizer
 } from '../GestureRecognizer'
+import _ from 'lodash'
 
 export default class Responder extends Component {
   constructor(props) {
