@@ -1,19 +1,19 @@
 import React, { Component, PropTypes } from 'react'
-import {
-  LongPressGestureRecognizer,
-  PanGestureRecognizer,
-  PinchGestureRecognizer,
-  RotationGestureRecognizer,
-  SwipeGestureRecognizer,
-  TapGestureRecognizer
-} from '../GestureRecognizer'
-import _ from 'lodash'
 
 export default class Responder extends Component {
+  static propTypes = {
+    children: PropTypes.node,
+    onClick: PropTypes.func,
+    touchesBegan: PropTypes.func,
+    touchesMoved: PropTypes.func,
+    touchesEnded: PropTypes.func
+  }
+
+  _gestureRecognizers = []
+  events = {}
+
   constructor(props) {
     super(props)
-
-    this._gestureRecognizers = []
 
     if (props.gestureRecognizers) {
       this._gestureRecognizers = props.gestureRecognizers.map(g => new g.type(g.props.action))
@@ -35,12 +35,4 @@ export default class Responder extends Component {
 
     return React.cloneElement(children, Object.assign(events, children.props))
   }
-}
-
-Responder.propTypes = {
-  children: PropTypes.node,
-  onClick: PropTypes.func,
-  touchesBegan: PropTypes.func,
-  touchesMoved: PropTypes.func,
-  touchesEnded: PropTypes.func
 }

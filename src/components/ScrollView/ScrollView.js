@@ -3,6 +3,14 @@ import classnames from 'classnames'
 import View from '../View'
 
 export default class ScrollView extends View {
+  static propTypes = {
+    children: PropTypes.node,
+    className: PropTypes.string,
+    isScrollEnabled: PropTypes.bool,
+    isPagingEnabled: PropTypes.bool,
+    delegate: PropTypes.object
+  }
+
   render() {
     const { children, className } = this.props
 
@@ -12,12 +20,4 @@ export default class ScrollView extends View {
       </View>
     )
   }
-}
-
-ScrollView.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  isScrollEnabled: PropTypes.bool,
-  isPagingEnabled: PropTypes.bool,
-  delegate: PropTypes.object
 }

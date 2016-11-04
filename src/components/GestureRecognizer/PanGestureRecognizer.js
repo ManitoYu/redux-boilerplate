@@ -2,19 +2,21 @@ import GestureRecognizer from './GestureRecognizer'
 import Touch from '../Touch'
 
 export default class PanGestureRecognizer extends GestureRecognizer {
+  action = null
+  view = null
+  translation = {
+    x: 0,
+    y: 0
+  }
+  velocity = {
+    x: 0,
+    y: 0
+  }
+
   constructor(action) {
     super()
 
     this.action = action
-    this.view = null
-    this.translation = {
-      x: 0,
-      y: 0
-    }
-    this.velocity = {
-      x: 0,
-      y: 0
-    }
   }
 
   began(e) {

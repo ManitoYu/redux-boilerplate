@@ -5,8 +5,11 @@ import ImageView from '../ImageView'
 import Label from '../Label'
 
 export default class BarButtonItem extends BarItem {
-  constructor(props) {
-    super(props)
+  static propTypes = {
+    image: PropTypes.element,
+    title: PropTypes.string,
+    action: PropTypes.func,
+    customView: PropTypes.element
   }
 
   render() {
@@ -30,11 +33,4 @@ export default class BarButtonItem extends BarItem {
       </View>
     )
   }
-}
-
-BarButtonItem.propTypes = {
-  image: PropTypes.element,
-  title: PropTypes.string,
-  action: PropTypes.func,
-  customView: PropTypes.element
 }

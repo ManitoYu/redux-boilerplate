@@ -14,4 +14,10 @@ export default class TableViewController extends ViewController {
   cellForRowAtIndexPath() {
     return <TableViewCell />
   }
+
+  didSelectRow() {
+  }
+
+  didDeselectRow() {
+  }
 }

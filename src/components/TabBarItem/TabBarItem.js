@@ -5,6 +5,11 @@ import Label from '../Label'
 import ImageView from '../ImageView'
 
 export default class TabBarItem extends BarItem {
+  static propTypes = {
+    title: PropTypes.string,
+    image: PropTypes.element
+  }
+
   render() {
     const { title, image } = this.props
 
@@ -15,9 +20,4 @@ export default class TabBarItem extends BarItem {
       </View>
     )
   }
-}
-
-TabBarItem.propTypes = {
-  title: PropTypes.string,
-  image: PropTypes.element
 }

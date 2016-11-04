@@ -4,11 +4,21 @@ import View from '../View'
 import TabBar from '../TabBar'
 
 export default class TabBarController extends ViewController {
+  static defaultProps = {
+    viewControllers: []
+  }
+
+  static propTypes = {
+    viewControllers: PropTypes.array
+  }
+
+  selectedViewController = null
+  selectedIndex = -1
+  viewControllers = []
+  tabBar = null
+
   constructor(props) {
     super(props)
-
-    this.selectedViewController = null
-    this.selectedIndex = -1
 
     this.viewControllers = props.viewControllers.map(
       (c, k) => React.cloneElement(c, Object.assign({ key: k, tabBarController: this }, c.props))
@@ -53,12 +63,4 @@ export default class TabBarController extends ViewController {
       </View>
     )
   }
-}
-
-TabBarController.defaultProps = {
-  viewControllers: []
-}
-
-TabBarController.propTypes = {
-  viewControllers: PropTypes.array
 }

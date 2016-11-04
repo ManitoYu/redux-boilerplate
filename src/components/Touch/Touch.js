@@ -1,11 +1,8 @@
 export default class Touch {
-  constructor() {
-    this.view = null
-    this.window = null
-    this.timestamp = 0
-
-    this.locations = []
-  }
+  view = null
+  window = null
+  timestamp = 0
+  locations = []
 
   update(e) {
     this.timestamp = Date.now()

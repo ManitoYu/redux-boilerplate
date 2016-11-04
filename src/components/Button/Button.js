@@ -1,8 +1,20 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import classnames from 'classnames'
 import Control from '../Control'
 
 export default class Button extends Control {
+  static defaultProps = {
+    enabled: true
+  }
+
+  static propTypes = {
+    children: PropTypes.node,
+    onClick: PropTypes.func,
+    style: PropTypes.object,
+    className: PropTypes.string,
+    enabled: PropTypes.bool
+  }
+
   render() {
     const { children, onClick, style, className, enabled } = this.props
 
@@ -13,16 +25,4 @@ export default class Button extends Control {
         onClick={onClick}>{children}</button>
     )
   }
-}
-
-Button.defaultProps = {
-  enabled: true
-}
-
-Button.propTypes = {
-  children: PropTypes.node,
-  onClick: PropTypes.func,
-  style: PropTypes.object,
-  className: PropTypes.string,
-  enabled: PropTypes.bool
 }

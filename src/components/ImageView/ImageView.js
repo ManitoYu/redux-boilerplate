@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import classnames from 'classnames'
 
 import View from '../View'
@@ -11,8 +11,19 @@ import {
 } from './constants'
 
 export default class ImageView extends View {
-  constructor(props) {
-    super(props)
+  static defaultProps = {
+    image: <Image />,
+    contentMode: ImageViewContentModeFit
+  }
+
+  static propTypes = {
+    image: PropTypes.element,
+    contentMode: PropTypes.oneOf([
+      ImageViewContentModeFit,
+      ImageViewContentModeScale,
+      ImageViewContentModeCover,
+      ImageViewContentModeContain
+    ])
   }
 
   render() {
@@ -39,19 +50,4 @@ export default class ImageView extends View {
       </View>
     )
   }
-}
-
-ImageView.defaultProps = {
-  image: <Image />,
-  contentMode: ImageViewContentModeFit
-}
-
-ImageView.propTypes = {
-  image: PropTypes.element,
-  contentMode: PropTypes.oneOf([
-    ImageViewContentModeFit,
-    ImageViewContentModeScale,
-    ImageViewContentModeCover,
-    ImageViewContentModeContain
-  ])
 }

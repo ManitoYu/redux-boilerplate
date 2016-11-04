@@ -3,10 +3,28 @@ import View from '../View'
 import BarButtonItem from '../BarButtonItem'
 
 export default class NavigationItem extends View {
+  static defaultProps = {
+    title: '',
+    leftBarButtonItem: <BarButtonItem />,
+    rightBarButtonItem: <BarButtonItem />,
+    leftBarButtonItems: [],
+    rightBarButtonItems: []
+  }
+
+  static propTypes = {
+    title: PropTypes.string
+  }
+
+  title = ''
+  backBarButtonItem = null
+  leftBarButtonItem = null
+  rightBarButtonItem = null
+  leftBarButtonItems = null
+  rightBarButtonItems = null
+
   constructor(props) {
     super(props)
 
-    this.title = ''
     this.backBarButtonItem = <BarButtonItem />
     this.leftBarButtonItem = props.leftBarButtonItem
     this.rightBarButtonItem = props.rightBarButtonItem
@@ -50,16 +68,4 @@ export default class NavigationItem extends View {
       </View>
     )
   }
-}
-
-NavigationItem.defaultProps = {
-  title: '',
-  leftBarButtonItem: <BarButtonItem />,
-  rightBarButtonItem: <BarButtonItem />,
-  leftBarButtonItems: [],
-  rightBarButtonItems: []
-}
-
-NavigationItem.propTypes = {
-  title: PropTypes.string
 }

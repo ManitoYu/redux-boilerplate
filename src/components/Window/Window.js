@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react'
 import View from '../View'
-import ViewController from '../ViewController'
 
 export default class Window extends View {
+  static propTypes = {
+    rootViewController: PropTypes.element
+  }
+
   render() {
     const { rootViewController } = this.props
 
@@ -12,8 +15,4 @@ export default class Window extends View {
       </View>
     )
   }
-}
-
-Window.propTypes = {
-  rootViewController: PropTypes.element
 }

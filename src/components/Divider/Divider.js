@@ -2,6 +2,11 @@ import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 
 export default class Divider extends Component {
+  static contextTypes = {
+    className: PropTypes.string,
+    style: PropTypes.object
+  }
+
   render() {
     const { className, style } = this.props
 
@@ -12,9 +17,4 @@ export default class Divider extends Component {
       </div>
     )
   }
-}
-
-Divider.contextTypes = {
-  className: PropTypes.string,
-  style: PropTypes.object
 }

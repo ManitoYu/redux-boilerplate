@@ -2,6 +2,13 @@ import React, { PropTypes } from 'react'
 import View from '../View'
 
 export default class TabBar extends View {
+  static propTypes = {
+    items: PropTypes.array
+  }
+
+  items = []
+  selectedItem = null
+
   constructor(props) {
     super(props)
 
@@ -23,8 +30,4 @@ export default class TabBar extends View {
       </View>
     )
   }
-}
-
-TabBar.propTypes = {
-  items: PropTypes.array
 }

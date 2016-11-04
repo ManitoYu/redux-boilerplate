@@ -6,19 +6,15 @@ import {
 } from './constants'
 
 export default class GestureRecognizer extends Component {
-  constructor(props) {
-    super(props)
+  view = null
+  numberOfTouches = []
+  gestureState = 0
+  gestureType = null
+  rads = []
 
-    this.view = null
-    this.numberOfTouches = []
-    this.gestureState = 0
-    this.gestureType = null
-    this.rads = []
-
-    // frequency control
-    this.interval = 1
-    this.intervalSteps = this.interval
-  }
+  // frequency control
+  interval = 1
+  intervalSteps = this.interval
 
   touchesBegan(e) {
     this.gestureState &= ~GestureRecognizerStateEnded
@@ -77,6 +73,18 @@ export default class GestureRecognizer extends Component {
   evaluate() {
     this.computeRads()
     return this.estimate()
+  }
+
+  began() {
+  }
+
+  moved() {
+  }
+
+  ended() {
+  }
+
+  estimate() {
   }
 
   render() {

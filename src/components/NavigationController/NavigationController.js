@@ -6,16 +6,16 @@ import View from '../View'
 import NavigationBar from '../NavigationBar'
 
 export default class NavigationController extends ViewController {
+  viewControllers = []
+  topViewController = null
+  navigationBar = null
+  _isNavigationBarHidden = false
+  navigationItems = []
+  history = createHistory()
+
   constructor(props) {
     super(props)
 
-    this.viewControllers = []
-    this.topViewController = null
-    this.navigationBar = null
-    this._isNavigationBarHidden = false
-    this.navigationItems = []
-
-    this.history = createHistory()
     this.history.listen((location, action) => {
     })
 

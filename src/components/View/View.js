@@ -3,6 +3,23 @@ import classnames from 'classnames'
 import Responder from '../Responder'
 
 export default class View extends Responder {
+  static defaultProps = {
+    width: 0,
+    height: 0,
+    clipsToBounds: false,
+    gestureRecognizers: []
+  }
+
+  static propTypes = {
+    children: PropTypes.node,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    className: PropTypes.string,
+    clipsToBounds: PropTypes.bool,
+    isHidden: PropTypes.bool,
+    gestureRecognizers: PropTypes.array
+  }
+
   render() {
     const { children, width, height, className, clipsToBounds, isHidden, top, left } = this.props
 
@@ -22,21 +39,4 @@ export default class View extends Responder {
       </Responder>
     )
   }
-}
-
-View.defaultProps = {
-  width: 0,
-  height: 0,
-  clipsToBounds: false,
-  gestureRecognizers: []
-}
-
-View.propTypes = {
-  children: PropTypes.node,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  className: PropTypes.string,
-  clipsToBounds: PropTypes.bool,
-  isHidden: PropTypes.bool,
-  gestureRecognizers: PropTypes.array
 }

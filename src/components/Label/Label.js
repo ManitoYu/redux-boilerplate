@@ -2,6 +2,10 @@ import React, { PropTypes } from 'react'
 import View from '../View'
 
 export default class Label extends View {
+  static propTypes = {
+    children: PropTypes.node
+  }
+
   render() {
     const { children } = this.props
 
@@ -11,8 +15,4 @@ export default class Label extends View {
       </View>
     )
   }
-}
-
-Label.propTypes = {
-  children: PropTypes.node
 }
