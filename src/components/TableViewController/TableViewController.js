@@ -7,7 +7,7 @@ export default class TableViewController extends ViewController {
     return 1
   }
 
-  numberOfRowsInSection() {
+  numberOfRowsInSection( ) {
     return 1
   }
 

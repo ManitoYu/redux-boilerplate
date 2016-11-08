@@ -1,4 +1,6 @@
 .TableView {
+  overflow: auto;
+
   .TableViewCell:last-of-type {
     .Divider {
       display: none;

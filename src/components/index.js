@@ -22,6 +22,7 @@ import Responder from './Responder'
 import BarButtonItem from './BarButtonItem'
 import Toolbar from './Toolbar'
 import NavigationItem from './NavigationItem'
+import TableViewHeaderFooterView from './TableViewHeaderFooterView'
 import Touch from './Touch'
 import {
   LongPressGestureRecognizer,
@@ -31,6 +32,12 @@ import {
   SwipeGestureRecognizer,
   TapGestureRecognizer
 } from './GestureRecognizer'
+
+import {
+  sizeMake,
+  pointMake,
+  rectMake
+} from './Shortcuts'
 
 export {
   Button,
@@ -63,5 +70,9 @@ export {
   PinchGestureRecognizer,
   RotationGestureRecognizer,
   SwipeGestureRecognizer,
-  TapGestureRecognizer
+  TapGestureRecognizer,
+  sizeMake,
+  pointMake,
+  TableViewHeaderFooterView,
+  rectMake
 }

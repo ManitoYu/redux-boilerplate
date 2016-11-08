@@ -29,9 +29,9 @@ export default class Responder extends Component {
 
   render() {
     const { children } = this.props
-    const { touchesBegan, touchesEnded, touchesMoved, onClick } = this.props
+    const { touchesBegan, touchesEnded, touchesMoved, onClick, onScroll } = this.props
 
-    const events = Object.assign({}, this.events, { onClick })
+    const events = Object.assign({}, this.events, { onClick, onScroll })
 
     return React.cloneElement(children, Object.assign(events, children.props))
   }
