@@ -1,11 +1,19 @@
 import React, { PropTypes } from 'react'
 import View from '../View'
 import Divider from '../Divider'
+import { edgeInsetsMake } from '../Shortcuts'
+import { TableViewCellSeparatorStyleSingleLine } from './constants'
 
 export default class TableViewCell extends View {
+  static defaultProps = {
+    separatorInset: edgeInsetsMake(0, 0, 0, 0)
+  }
+
   static propTypes = {
     children: PropTypes.node,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    separatorInset: PropTypes.object,
+    separatorStyle: PropTypes.number
   }
 
   isSelected = false
@@ -18,7 +26,7 @@ export default class TableViewCell extends View {
   }
 
   render() {
-    const { children, y, height } = this.props
+    const { children, y, height, separatorInset, separatorStyle } = this.props
 
     return (
       <View
@@ -31,7 +39,10 @@ export default class TableViewCell extends View {
           clipsToBounds={true}>
         {children}
         </View>
-        <Divider />
+        {
+          separatorStyle == TableViewCellSeparatorStyleSingleLine &&
+            <Divider separatorInset={separatorInset} />
+        }
       </View>
     )
   }

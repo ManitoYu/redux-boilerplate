@@ -8,7 +8,9 @@ export default class View extends Responder {
     frame: rectMake(null, null, null, null),
     clipsToBounds: false,
     isHidden: false,
-    gestureRecognizers: []
+    gestureRecognizers: [],
+    position: '',
+    style: {}
   }
 
   static propTypes = {
@@ -21,27 +23,41 @@ export default class View extends Responder {
     height: PropTypes.number,
     clipsToBounds: PropTypes.bool,
     isHidden: PropTypes.bool,
-    gestureRecognizers: PropTypes.array
+    gestureRecognizers: PropTypes.array,
+    position: PropTypes.string,
+    style: PropTypes.object
   }
 
   render() {
-    const { children, className, clipsToBounds, isHidden, x, y, width, height } = this.props
+    const {
+      children,
+      className,
+      clipsToBounds,
+      isHidden,
+      x,
+      y,
+      width,
+      height,
+      position,
+      style
+    } = this.props
 
-    let style = {}
+    let finalStyle = { ...style }
 
     // frame
-    if (width) style.width = `${width}px`
-    if (height) style.height = `${height}px`
-    if (x) style.left = `${x}px`
-    if (y) style.top = `${y}px`
+    if (width) finalStyle.width = `${width}px`
+    if (height) finalStyle.height = `${height}px`
+    if (x) finalStyle.left = `${x}px`
+    if (y) finalStyle.top = `${y}px`
 
     // others
-    if (clipsToBounds) style.overflow = 'hidden'
-    if (isHidden) style.display = 'none'
+    if (clipsToBounds) finalStyle.overflow = 'hidden'
+    if (isHidden) finalStyle.display = 'none'
+    if (position) finalStyle.position = position
 
     return (
       <Responder {...this.props}>
-        <div className={classnames('View', className)} style={style}>
+        <div className={classnames('View', className)} style={finalStyle}>
         {children}
         </div>
       </Responder>
