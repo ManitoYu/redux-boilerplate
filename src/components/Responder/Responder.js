@@ -21,7 +21,7 @@ export default class Responder extends Component {
       this.events = {
         onMouseDown: e => this._gestureRecognizers.map(g => g.touchesBegan(e)),
         onMouseMove: e => this._gestureRecognizers.map(g => g.touchesMoved(e)),
-        onMouseOut: e => this._gestureRecognizers.map(g => g.touchesEnded(e)),
+        // onMouseOut: e => this._gestureRecognizers.map(g => g.touchesEnded(e)),
         onMouseUp: e => this._gestureRecognizers.map(g => g.touchesEnded(e))
       }
     }

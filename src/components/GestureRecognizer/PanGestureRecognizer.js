@@ -1,5 +1,6 @@
 import GestureRecognizer from './GestureRecognizer'
 import Touch from '../Touch'
+import { pointMake } from '../Shortcuts'
 
 export default class PanGestureRecognizer extends GestureRecognizer {
   action = null
@@ -19,6 +20,10 @@ export default class PanGestureRecognizer extends GestureRecognizer {
     this.action = action
   }
 
+  setTranslation(translation) {
+    this.translation = translation
+  }
+
   began(e) {
     this.numberOfTouches = [new Touch()]
     this.moved(e)
@@ -33,15 +38,22 @@ export default class PanGestureRecognizer extends GestureRecognizer {
     let prevLocation = touch.previousLocation()
     let curLocation = touch.location()
 
-    this.translation = {
-      x: e.pageX - touch.originalLocation().x,
-      y: e.pageY - touch.originalLocation().y
+    if (this.translation.x == 0 && this.translation.y == 0) {
+      this.setTranslation(pointMake(
+        touch.location().x - touch.previousLocation().x,
+        touch.location().y - touch.previousLocation().y
+      ))
+    } else {
+      this.setTranslation(pointMake(
+        e.pageX - touch.originalLocation().x,
+        e.pageY - touch.originalLocation().y
+      ))
     }
 
-    this.velocity = {
-      x: (curLocation.x - prevLocation.x) / (curLocation.t - prevLocation.t),
-      y: (curLocation.y - prevLocation.y) / (curLocation.t - prevLocation.t)
-    }
+    this.velocity = pointMake(
+      (curLocation.x - prevLocation.x) / (curLocation.t - prevLocation.t),
+      (curLocation.y - prevLocation.y) / (curLocation.t - prevLocation.t)
+    )
   }
 
   ended(e) {

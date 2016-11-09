@@ -5,6 +5,8 @@ import {
   GestureRecognizerStateEnded
 } from './constants'
 
+import { time } from 'core-decorators'
+
 export default class GestureRecognizer extends Component {
   view = null
   numberOfTouches = []
@@ -33,7 +35,6 @@ export default class GestureRecognizer extends Component {
 
   touchesMoved(e) {
     if (! this.shouldSample()) return
-
     if (! (this.gestureState & GestureRecognizerStateBegan)) return
     this.gestureState |= GestureRecognizerStateChanged
     this.moved(e)

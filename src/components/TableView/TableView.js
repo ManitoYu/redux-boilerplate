@@ -7,6 +7,8 @@ import {
   TableViewCellSeparatorStyleSingleLine
 } from '../TableViewCell/constants'
 
+import { time } from 'core-decorators'
+
 export default class TableView extends ScrollView {
   static propTypes = {
     className: PropTypes.string,
