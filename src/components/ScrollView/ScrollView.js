@@ -69,6 +69,9 @@ export default class ScrollView extends View {
     // over max content offset
     _contentDOMNode.classList.remove('is-animated')
 
+    // reset top and bottom
+    _contentDOMNode.style.top = ''
+    _contentDOMNode.style.bottom = ''
 
     if (offset.y - maxContentOffset.y > 0) {
       _contentDOMNode.style.bottom = offset.y - maxContentOffset.y + 'px'
@@ -139,7 +142,7 @@ export default class ScrollView extends View {
         gestureRecognizers={[this.panGestureRecognizer]}
         className={classnames('ScrollView', className)}
         onScroll={this.handleScroll.bind(this)}
-        clipsToBounds={! this.props.isScrollEnabled}
+        clipsToBounds={true}
         style={style}
         {...this.props}>
         <View className="ScrollView-contentView" height={contentSize.height} ref="content">
