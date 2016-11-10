@@ -1,3 +1,9 @@
 .ScrollView {
-  
+  &-contentView {
+
+    &.is-animated {
+      transition: bottom .8s, top .8s;
+    }
+
+  }
 }

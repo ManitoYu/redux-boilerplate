@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react'
 import classnames from 'classnames'
+import ReactDOM from 'react-dom'
+import { lazyInitialize } from 'core-decorators'
 import View from '../View'
 import { sizeMake, pointMake, edgeInsetsMake, pointZero } from '../Shortcuts'
 import { PanGestureRecognizer } from '../GestureRecognizer'
-import ReactDOM from 'react-dom'
-import { lazyInitialize } from 'core-decorators'
+import { GestureRecognizerStateEnded } from '../GestureRecognizer/constants'
 
 export default class ScrollView extends View {
   static propTypes = {
@@ -27,17 +28,81 @@ export default class ScrollView extends View {
   }
 
   contentOffset = pointMake(0, 0)
+  maxContentOffset = pointMake(0, 0)
+  _contentDOMNode = null
 
   @lazyInitialize panGestureRecognizer = (
-    <PanGestureRecognizer action={this.handlePan.bind(this)}/>
+    <PanGestureRecognizer action={this._handlePan.bind(this)}/>
   )
 
-  handlePan(g) {
-    this.setContentOffset(pointMake(
-      this.contentOffset.x + g.translation.x,
-      this.contentOffset.y + g.translation.y
-    ))
+  constructor(props) {
+    super(props)
+
+    this._initMaxContentOffset()
+  }
+
+  /**
+   * @access private
+   */
+  _initMaxContentOffset() {
+    this.maxContentOffset = pointMake(
+      0,
+      this.props.contentSize.height - this.props.height
+    )
+  }
+
+  /**
+   * @access private
+   */
+  _handlePan(g) {
+    const { contentOffset, maxContentOffset, _contentDOMNode } = this
+
+    // next translation
+    let offset = pointMake(
+      contentOffset.x - g.translation.x,
+      contentOffset.y - g.translation.y
+    )
+
+    // make each translation relative to last translation
     g.setTranslation(pointZero())
+
+    // over max content offset
+    _contentDOMNode.classList.remove('is-animated')
+
+
+    if (offset.y - maxContentOffset.y > 0) {
+      _contentDOMNode.style.bottom = offset.y - maxContentOffset.y + 'px'
+    }
+
+    if (offset.y < 0) {
+      _contentDOMNode.style.top = -offset.y + 'px'
+    }
+
+    // stop gesture
+    if (g.gestureState & GestureRecognizerStateEnded) {
+      // add bounce effect
+      _contentDOMNode.classList.add('is-animated')
+
+      if (offset.y - maxContentOffset.y > 0) {
+        _contentDOMNode.style.bottom = 0
+
+        // set offset to max content offset
+        offset.y = maxContentOffset.y
+      }
+
+      if (offset.y < 0) {
+        _contentDOMNode.style.top = 0
+
+        // set offset to zero
+        offset.y = 0
+      }
+    }
+
+    this.setContentOffset(offset)
+  }
+
+  componentWillUpdate() {
+    this._initMaxContentOffset()
   }
 
   handleScroll(e) {
@@ -47,15 +112,16 @@ export default class ScrollView extends View {
   }
 
   setContentOffset(contentOffset) {
+    ReactDOM.findDOMNode(this).scrollTop = contentOffset.y
     this.contentOffset = contentOffset
-    if (this.contentOffset.y) {
-      ReactDOM.findDOMNode(this).scrollTop = this.contentOffset.y
-    }
   }
 
   componentDidMount() {
     const { contentOffset } = this.props
+
     if (contentOffset) this.setContentOffset(contentOffset)
+
+    this._contentDOMNode = ReactDOM.findDOMNode(this.refs.content)
   }
 
   render() {
