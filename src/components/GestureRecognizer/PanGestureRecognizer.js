@@ -40,8 +40,8 @@ export default class PanGestureRecognizer extends GestureRecognizer {
 
     if (this.translation.x == 0 && this.translation.y == 0) {
       this.setTranslation(pointMake(
-        touch.location().x - touch.previousLocation().x,
-        touch.location().y - touch.previousLocation().y
+        curLocation.x - prevLocation.x,
+        curLocation.y - prevLocation.y
       ))
     } else {
       this.setTranslation(pointMake(
@@ -51,13 +51,13 @@ export default class PanGestureRecognizer extends GestureRecognizer {
     }
 
     this.velocity = pointMake(
-      (curLocation.x - prevLocation.x) / (curLocation.t - prevLocation.t),
-      (curLocation.y - prevLocation.y) / (curLocation.t - prevLocation.t)
+      (curLocation.x - prevLocation.x) / (curLocation.t - prevLocation.t) * 1000,
+      (curLocation.y - prevLocation.y) / (curLocation.t - prevLocation.t) * 1000
     )
   }
 
   ended(e) {
-    this.moved(e)
+    // this.moved(e)
   }
 
   estimate() {

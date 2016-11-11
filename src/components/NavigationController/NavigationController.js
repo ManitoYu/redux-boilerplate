@@ -23,10 +23,26 @@ export default class NavigationController extends ViewController {
       this.viewControllers.unshift(props.rootViewController)
       this.topViewController = props.rootViewController
     }
+
+    this._initViewControllers()
+  }
+
+  /**
+   * @access private
+   */
+  _initViewControllers() {
+    this.viewControllers = this.viewControllers.map((c, k) =>
+      React.cloneElement(c, {
+        key: c.key || this.viewControllers.length - 1 - k,
+        navigationController: this,
+        registerNavigationItem: this.registerNavigationItem.bind(this, this.viewControllers.length - 1 - k)
+      })
+    )
   }
 
   pushViewController(url, controller) {
     this.viewControllers.unshift(controller)
+    this._initViewControllers()
     this.topViewController = this.viewControllers[0]
 
     url && this.history.push(url)
@@ -37,6 +53,7 @@ export default class NavigationController extends ViewController {
     if (this.viewControllers.length == 1) return
 
     this.viewControllers.shift()
+    this._initViewControllers()
     this.topViewController = this.viewControllers[0]
 
     this.history.goBack()
@@ -61,18 +78,17 @@ export default class NavigationController extends ViewController {
   }
 
   componentDidMount() {
+    /**
+     * XXX in orther to render navigation bar
+     *
+     * Rendering navigation bar will be later than navigation controller
+     * Only when a controller is mounted the navigation bar would be registered
+     * So need once force updating, the navigation can be rendered
+     */
     this.forceUpdate()
   }
 
   render() {
-    this.viewControllers = this.viewControllers.map((c, k) =>
-      React.cloneElement(c, {
-        key: c.key || this.viewControllers.length - 1 - k,
-        navigationController: this,
-        registerNavigationItem: this.registerNavigationItem.bind(this, this.viewControllers.length - 1 - k)
-      })
-    )
-
     return (
       <View className="NavigationController">
         {! this._isNavigationBarHidden

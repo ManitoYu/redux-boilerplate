@@ -46,7 +46,7 @@ export default class ScrollView extends View {
    */
   _initMaxContentOffset() {
     this.maxContentOffset = pointMake(
-      0,
+      this.props.contentSize.width - this.props.width,
       this.props.contentSize.height - this.props.height
     )
   }
@@ -55,9 +55,19 @@ export default class ScrollView extends View {
    * @access private
    */
   _handlePan(g) {
+    const { isPagingEnabled, isScrollEnabled, height, delegate, contentSize, width } = this.props
     const { contentOffset, maxContentOffset, _contentDOMNode } = this
 
-    // next translation
+    if (! isScrollEnabled) return
+
+    /**
+     * next translation
+     *
+     * to top, offset.y will increase
+     * to right, offset.x will increase
+     * to bottom, offset.y will decrease
+     * to left, offset.x will decrease
+     */
     let offset = pointMake(
       contentOffset.x - g.translation.x,
       contentOffset.y - g.translation.y
@@ -72,13 +82,27 @@ export default class ScrollView extends View {
     // reset top and bottom
     _contentDOMNode.style.top = ''
     _contentDOMNode.style.bottom = ''
+    _contentDOMNode.style.left = ''
+    _contentDOMNode.style.right = ''
 
-    if (offset.y - maxContentOffset.y > 0) {
-      _contentDOMNode.style.bottom = offset.y - maxContentOffset.y + 'px'
+    if (contentSize.height > 0) {
+      if (offset.y < 0) {
+        _contentDOMNode.style.top = `${-offset.y}px`
+      }
+
+      if (offset.y - maxContentOffset.y > 0) {
+        _contentDOMNode.style.bottom = `${offset.y - maxContentOffset.y}px`
+      }
     }
 
-    if (offset.y < 0) {
-      _contentDOMNode.style.top = -offset.y + 'px'
+    if (contentSize.width > 0) {
+      if (offset.x < 0) {
+        _contentDOMNode.style.left = `${-offset.x}px`
+      }
+
+      if (offset.x - maxContentOffset.x > 0) {
+        _contentDOMNode.style.right = `${offset.x - maxContentOffset.x}px`
+      }
     }
 
     // stop gesture
@@ -86,36 +110,67 @@ export default class ScrollView extends View {
       // add bounce effect
       _contentDOMNode.classList.add('is-animated')
 
-      if (offset.y - maxContentOffset.y > 0) {
-        _contentDOMNode.style.bottom = 0
+      if (contentSize.height > 0) {
+        if (offset.y < 0) {
+          _contentDOMNode.style.top = 0
 
-        // set offset to max content offset
-        offset.y = maxContentOffset.y
+          // set offset to zero
+          offset.y = 0
+        }
+
+        if (offset.y - maxContentOffset.y > 0) {
+          _contentDOMNode.style.bottom = 0
+
+          // set offset to max content offset
+          offset.y = maxContentOffset.y
+        }
+
+        if (isPagingEnabled) {
+          offset.y = Math.round(offset.y / height) * height
+        }
       }
 
-      if (offset.y < 0) {
-        _contentDOMNode.style.top = 0
+      if (contentSize.width > 0) {
+        if (offset.x < 0) {
+          _contentDOMNode.style.left = 0
 
-        // set offset to zero
-        offset.y = 0
+          // set offset to zero
+          offset.x = 0
+        }
+
+        if (offset.x - maxContentOffset.x > 0) {
+          _contentDOMNode.style.right = 0
+
+          // set offset to max content offset
+          offset.x = maxContentOffset.x
+        }
+
+        if (isPagingEnabled) {
+          offset.x = Math.round(offset.x / width) * width
+        }
       }
     }
 
     this.setContentOffset(offset)
+
+    if (delegate.scrollViewDidScroll) {
+      delegate.scrollViewDidScroll(this)
+    }
   }
 
   componentWillUpdate() {
     this._initMaxContentOffset()
   }
 
-  handleScroll(e) {
-    if (! this.props.isScrollEnabled) return
-    this.contentOffset.y = e.nativeEvent.target.scrollTop
-    this.props.delegate.scrollViewDidScroll(this)
-  }
-
   setContentOffset(contentOffset) {
-    ReactDOM.findDOMNode(this).scrollTop = contentOffset.y
+    if (this.props.contentSize.width) {
+      this._contentDOMNode.style.left = `${-contentOffset.x}px`
+    }
+
+    if (this.props.contentSize.height) {
+      this._contentDOMNode.style.top = `${-contentOffset.y}px`
+    }
+    // ReactDOM.findDOMNode(this).scrollTop = contentOffset.y
     this.contentOffset = contentOffset
   }
 
@@ -137,15 +192,16 @@ export default class ScrollView extends View {
     if (contentInset.bottom) style.paddingBottom = contentInset.bottom
     if (contentInset.left) style.paddingLeft = contentInset.left
 
+    // onScroll={this.handleScroll.bind(this)}
+
     return (
       <View
         gestureRecognizers={[this.panGestureRecognizer]}
         className={classnames('ScrollView', className)}
-        onScroll={this.handleScroll.bind(this)}
         clipsToBounds={true}
         style={style}
         {...this.props}>
-        <View className="ScrollView-contentView" height={contentSize.height} ref="content">
+        <View className="ScrollView-contentView" height={contentSize.height} width={contentSize.width} ref="content">
         {children}
         </View>
       </View>

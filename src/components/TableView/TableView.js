@@ -108,6 +108,8 @@ export default class TableView extends ScrollView {
   }
 
   scrollViewDidScroll(scrollView) {
+    if (scrollView.contentOffset.y < 0) return
+
     // calculates number of cells out of tableview
     let outOfRows = Math.floor(scrollView.contentOffset.y / (this.rowHeight + this.separatorHeight))
 

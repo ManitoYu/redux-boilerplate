@@ -2,7 +2,7 @@
   &-contentView {
 
     &.is-animated {
-      transition: bottom .8s, top .8s;
+      transition: bottom .8s, top .8s, left .8s, right .8s;
     }
 
   }

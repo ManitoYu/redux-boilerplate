@@ -6,11 +6,26 @@ export default class Touch {
 
   update(e) {
     this.timestamp = Date.now()
-    this.locations.push({
-      t: this.timestamp,
-      x: e.pageX,
-      y: e.pageY
-    })
+
+    switch (true) {
+      // mouse
+      case e.nativeEvent instanceof MouseEvent:
+        this.locations.push({
+          t: this.timestamp,
+          x: e.pageX,
+          y: e.pageY
+        })
+        break
+
+      // touch
+      case e.nativeEvent instanceof TouchEvent:
+        this.locations.push({
+          t: this.timestamp,
+          x: e.nativeEvent.touches[0].pageX,
+          y: e.nativeEvent.touches[0].pageY
+        })
+        break
+    }
   }
 
   location() {

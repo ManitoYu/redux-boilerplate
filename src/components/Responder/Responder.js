@@ -22,7 +22,10 @@ export default class Responder extends Component {
         onMouseDown: e => this._gestureRecognizers.map(g => g.touchesBegan(e)),
         onMouseMove: e => this._gestureRecognizers.map(g => g.touchesMoved(e)),
         // onMouseOut: e => this._gestureRecognizers.map(g => g.touchesEnded(e)),
-        onMouseUp: e => this._gestureRecognizers.map(g => g.touchesEnded(e))
+        onMouseUp: e => this._gestureRecognizers.map(g => g.touchesEnded(e)),
+        onTouchStart: e => this._gestureRecognizers.map(g => g.touchesBegan(e)),
+        onTouchMove: e => this._gestureRecognizers.map(g => g.touchesMoved(e)),
+        onTouchEnd: e => this._gestureRecognizers.map(g => g.touchesEnded(e))
       }
     }
   }
