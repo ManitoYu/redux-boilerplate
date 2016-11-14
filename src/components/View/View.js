@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react'
 import classnames from 'classnames'
 import Responder from '../Responder'
 import { rectMake } from '../Shortcuts'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import { time } from 'core-decorators'
 
 export default class View extends Responder {
   static defaultProps = {
@@ -58,7 +60,7 @@ export default class View extends Responder {
     return (
       <Responder {...this.props}>
         <div className={classnames('View', className)} style={finalStyle}>
-        {children}
+          {children}
         </div>
       </Responder>
     )

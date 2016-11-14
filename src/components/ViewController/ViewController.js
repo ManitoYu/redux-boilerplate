@@ -1,9 +1,16 @@
-import React from 'react'
+import { PropTypes } from 'react'
 import View from '../View'
 
 export default class ViewController extends View {
   navigationController = null
   tabBarController = null
+  presentingViewController = null
+  presentedViewController = null
+
+  static contextTypes = {
+    present: PropTypes.func,
+    dismiss: PropTypes.func
+  }
 
   constructor(props) {
     super(props)
@@ -13,20 +20,14 @@ export default class ViewController extends View {
   }
 
   dismiss() {
-
+    this.presentingViewController = null
+    this.presentedViewController = null
+    this.context.dismiss()
   }
 
-  present() {
-
-  }
-
-  render() {
-    const { children } = this.props
-
-    return (
-      <View className="ViewController">
-      {children}
-      </View>
-    )
+  present(controller) {
+    this.presentingViewController = this
+    this.presentedViewController = controller
+    this.context.present(this.presentedViewController)
   }
 }

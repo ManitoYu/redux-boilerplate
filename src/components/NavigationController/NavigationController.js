@@ -4,27 +4,30 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import ViewController from '../ViewController'
 import View from '../View'
 import NavigationBar from '../NavigationBar'
+import { last } from '../Shortcuts'
 
 export default class NavigationController extends ViewController {
+  static propTypes = {
+    rootViewController: PropTypes.object
+  }
+
   viewControllers = []
   topViewController = null
   navigationBar = null
-  _isNavigationBarHidden = false
   navigationItems = []
   history = createHistory()
+  _isNavigationBarHidden = false
 
   constructor(props) {
     super(props)
 
-    this.history.listen((location, action) => {
-    })
+    // FIXME
+    // this.history.listen((location, action) => {
+    // })
 
     if (props.rootViewController) {
-      this.viewControllers.unshift(props.rootViewController)
-      this.topViewController = props.rootViewController
+      this.pushViewController('/', props.rootViewController)
     }
-
-    this._initViewControllers()
   }
 
   /**
@@ -33,28 +36,29 @@ export default class NavigationController extends ViewController {
   _initViewControllers() {
     this.viewControllers = this.viewControllers.map((c, k) =>
       React.cloneElement(c, {
-        key: c.key || this.viewControllers.length - 1 - k,
+        key: c.key || k,
         navigationController: this,
-        registerNavigationItem: this.registerNavigationItem.bind(this, this.viewControllers.length - 1 - k)
+        registerNavigationItem: this.registerNavigationItem.bind(this, k)
       })
     )
   }
 
   pushViewController(url, controller) {
-    this.viewControllers.unshift(controller)
+    this.viewControllers.push(controller)
     this._initViewControllers()
-    this.topViewController = this.viewControllers[0]
+    this.topViewController = last(this.viewControllers)
 
     url && this.history.push(url)
-    this.forceUpdate()
+
+    this.viewControllers.length > 1 && this.forceUpdate()
   }
 
   popViewController() {
     if (this.viewControllers.length == 1) return
 
-    this.viewControllers.shift()
+    this.viewControllers.pop()
     this._initViewControllers()
-    this.topViewController = this.viewControllers[0]
+    this.topViewController = last(this.viewControllers)
 
     this.history.goBack()
     this.forceUpdate()
@@ -97,8 +101,8 @@ export default class NavigationController extends ViewController {
           component="div"
           className="NavigationController-views"
           transitionName="page"
-          transitionEnterTimeout={600}
-          transitionLeaveTimeout={600}>
+          transitionEnterTimeout={800}
+          transitionLeaveTimeout={800}>
         {this.viewControllers}
         </ReactCSSTransitionGroup>
       </View>

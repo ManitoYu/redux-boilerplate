@@ -1,0 +1,6 @@
+@import '../../extend';
+
+.Application {
+  @extend .scale-to-fill;
+  position: fixed;
+}

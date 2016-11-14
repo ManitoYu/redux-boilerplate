@@ -32,6 +32,7 @@ import {
   SwipeGestureRecognizer,
   TapGestureRecognizer
 } from './GestureRecognizer'
+import Application from './Application'
 
 import {
   sizeMake,
@@ -74,5 +75,6 @@ export {
   sizeMake,
   pointMake,
   TableViewHeaderFooterView,
-  rectMake
+  rectMake,
+  Application
 }

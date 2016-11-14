@@ -33,10 +33,20 @@ ul {
 }
 
 .page-enter {
-  animation: slideInRight .6s;
+  animation: slideInRight .8s;
   animation-fill-mode: forwards;
 }
 .page-leave {
-  animation: slideOutRight .6s;
+  animation: slideOutRight .8s;
+  animation-fill-mode: forwards;
+}
+
+.modal-enter {
+  animation: slideInUp .6s;
+  animation-fill-mode: forwards;
+}
+
+.modal-leave {
+  animation: slideOutDown .6s;
   animation-fill-mode: forwards;
 }
