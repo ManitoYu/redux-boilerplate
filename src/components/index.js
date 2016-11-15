@@ -33,6 +33,11 @@ import {
   TapGestureRecognizer
 } from './GestureRecognizer'
 import Application from './Application'
+import CollectionView from './CollectionView'
+import {
+  CollectionViewFlowLayout
+} from './CollectionViewLayout'
+import CollectionViewCell from './CollectionViewCell'
 
 import {
   sizeMake,
@@ -76,5 +81,8 @@ export {
   pointMake,
   TableViewHeaderFooterView,
   rectMake,
-  Application
+  Application,
+  CollectionView,
+  CollectionViewFlowLayout,
+  CollectionViewCell
 }

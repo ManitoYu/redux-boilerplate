@@ -153,7 +153,7 @@ export default class ScrollView extends View {
 
     this.setContentOffset(offset)
 
-    if (delegate.scrollViewDidScroll) {
+    if (delegate && delegate.scrollViewDidScroll) {
       delegate.scrollViewDidScroll(this)
     }
   }
