@@ -15,8 +15,6 @@ export default class CollectionViewCell extends View {
   render() {
     const { children, frame } = this.props
 
-    console.log(frame)
-
     return (
       <View className="CollectionViewCell" {...frame}>
         {children}

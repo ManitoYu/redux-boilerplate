@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import ScrollView from '../ScrollView'
-import { sizeMake, rectMake } from '../Shortcuts'
+import { sizeMake, rectMake, take } from '../Shortcuts'
 import { lazyInitialize } from 'core-decorators'
 
 export default class CollectionView extends ScrollView {
@@ -27,18 +27,29 @@ export default class CollectionView extends ScrollView {
     return layout
   }
 
+  scrollViewDidScroll(scrollView) {
+    this.contentOffset = scrollView.contentOffset
+    this.forceUpdate()
+  }
+
   render() {
     const { height, width, dataSource } = this.props
+    const { contentOffset } = this
 
-    let attrs = this._layout.layoutAttributesForElements(rectMake(0, 0, width, height))
+    let attrs = this._layout.layoutAttributesForElements(rectMake(contentOffset.x, contentOffset.y, width, height))
+    attrs = take(attrs, dataSource.numberOfItemsInSection())
 
-    let cells = attrs.map((a, k) => {
+    let cells = attrs.map(a => {
       let cell = dataSource.cellForItemAtIndexPath(a.indexPath)
-      return React.cloneElement(cell, { ...cell.props, key: k, frame: a.frame })
+      return React.cloneElement(cell, { ...cell.props, key: a.indexPath.item, frame: a.frame })
     })
 
     return (
-      <ScrollView style={{ backgroundColor: '#4ABDAC' }} width={width} height={height} contentSize={sizeMake(width, height)}>
+      <ScrollView style={{ backgroundColor: '#ccc' }}
+        width={width}
+        height={height}
+        contentSize={this._layout.collectionViewContentSize}
+        delegate={this}>
         {cells}
       </ScrollView>
     )

@@ -17,14 +17,19 @@ export default class ScrollView extends View {
     contentOffset: PropTypes.object,
     contentInset: PropTypes.object,
     delegate: PropTypes.object,
-    bounces: PropTypes.bool
+    bounces: PropTypes.bool,
+    alwaysBounceHorizontal: PropTypes.bool,
+    alwaysBounceVertical: PropTypes.bool
   }
 
   static defaultProps = {
     bounces: true,
     isScrollEnabled: true,
     contentSize: sizeMake(0, 0),
-    contentInset: edgeInsetsMake(0, 0, 0, 0)
+    contentInset: edgeInsetsMake(0, 0, 0, 0),
+    bounce: true,
+    alwaysBounceHorizontal: true,
+    alwaysBounceVertical: true
   }
 
   contentOffset = pointMake(0, 0)
@@ -55,7 +60,18 @@ export default class ScrollView extends View {
    * @access private
    */
   _handlePan(g) {
-    const { isPagingEnabled, isScrollEnabled, height, delegate, contentSize, width } = this.props
+    const {
+      isPagingEnabled,
+      isScrollEnabled,
+      height,
+      delegate,
+      contentSize,
+      width,
+      bounce,
+      alwaysBounceVertical,
+      alwaysBounceHorizontal
+    } = this.props
+
     const { contentOffset, maxContentOffset, _contentDOMNode } = this
 
     if (! isScrollEnabled) return
@@ -76,6 +92,17 @@ export default class ScrollView extends View {
     // make each translation relative to last translation
     g.setTranslation(pointZero())
 
+    // bounce effect
+    if (! bounce || ! alwaysBounceHorizontal) {
+      if (offset.x < 0) offset.x = 0
+      if (offset.x > maxContentOffset.x) offset.x = maxContentOffset.x
+    }
+
+    if (! bounce || ! alwaysBounceVertical) {
+      if (offset.y < 0) offset.y = 0
+      if (offset.y > maxContentOffset.y) offset.y = maxContentOffset.y
+    }
+
     // over max content offset
     _contentDOMNode.classList.remove('is-animated')
 
@@ -84,26 +111,6 @@ export default class ScrollView extends View {
     _contentDOMNode.style.bottom = ''
     _contentDOMNode.style.left = ''
     _contentDOMNode.style.right = ''
-
-    if (contentSize.height > 0) {
-      if (offset.y < 0) {
-        _contentDOMNode.style.top = `${-offset.y}px`
-      }
-
-      if (offset.y - maxContentOffset.y > 0) {
-        _contentDOMNode.style.bottom = `${offset.y - maxContentOffset.y}px`
-      }
-    }
-
-    if (contentSize.width > 0) {
-      if (offset.x < 0) {
-        _contentDOMNode.style.left = `${-offset.x}px`
-      }
-
-      if (offset.x - maxContentOffset.x > 0) {
-        _contentDOMNode.style.right = `${offset.x - maxContentOffset.x}px`
-      }
-    }
 
     // stop gesture
     if (g.gestureState & GestureRecognizerStateEnded) {
