@@ -70,8 +70,6 @@ export default class CollectionViewFlowLayout extends CollectionViewLayout {
   }
 
   layoutAttributesForElements(rect) {
-    this._initLayout(rect)
-
     let attrs = Array(this._totalRows).fill().map((r, m) =>
       Array(this._columns).fill().map((c, n) => {
         if (! this._isInRect(m, n, rect)) return []

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ScrollView from '../ScrollView'
 import { sizeMake, rectMake, take } from '../Shortcuts'
-import { lazyInitialize } from 'core-decorators'
+import { lazyInitialize, time } from 'core-decorators'
 
 export default class CollectionView extends ScrollView {
   @lazyInitialize _layout = this.layout()
@@ -36,6 +36,7 @@ export default class CollectionView extends ScrollView {
     const { height, width, dataSource } = this.props
     const { contentOffset } = this
 
+    this._layout._initLayout(rectMake(contentOffset.x, contentOffset.y, width, height))
     let attrs = this._layout.layoutAttributesForElements(rectMake(contentOffset.x, contentOffset.y, width, height))
     attrs = take(attrs, dataSource.numberOfItemsInSection())
 

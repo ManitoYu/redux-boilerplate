@@ -54,6 +54,8 @@ export default class ScrollView extends View {
       this.props.contentSize.width - this.props.width,
       this.props.contentSize.height - this.props.height
     )
+    if (this.maxContentOffset.x < 0) this.maxContentOffset.x = 0
+    if (this.maxContentOffset.y < 0) this.maxContentOffset.y = 0
   }
 
   /**
@@ -189,6 +191,10 @@ export default class ScrollView extends View {
     this._contentDOMNode = ReactDOM.findDOMNode(this.refs.content)
   }
 
+  _scrollIndicator(direction, g) {
+
+  }
+
   render() {
     const { children, className, contentSize, contentInset } = this.props
 
@@ -199,17 +205,34 @@ export default class ScrollView extends View {
     if (contentInset.bottom) style.paddingBottom = contentInset.bottom
     if (contentInset.left) style.paddingLeft = contentInset.left
 
-    // onScroll={this.handleScroll.bind(this)}
 
     return (
       <View
-        gestureRecognizers={[this.panGestureRecognizer]}
         className={classnames('ScrollView', className)}
+        gestureRecognizers={[this.panGestureRecognizer]}
         clipsToBounds={true}
         style={style}
         {...this.props}>
         <View className="ScrollView-contentView" height={contentSize.height} width={contentSize.width} ref="content">
         {children}
+        </View>
+        <View className="ScrollView-indicator ScrollView-indicator--vertical">
+          <View
+            gestureRecognizers={[
+              <PanGestureRecognizer action={this._scrollIndicator.bind(this, 'vertical')} />
+            ]}
+            ref="verticalIndicator"
+            className="ScrollView-indicator-slider"
+            style={{ height: `${this.props.height / contentSize.height * 100}%` }} />
+        </View>
+        <View className="ScrollView-indicator ScrollView-indicator--horizontal">
+          <View
+            gestureRecognizers={[
+              <PanGestureRecognizer action={this._scrollIndicator.bind(this, 'horizontal')} />
+            ]}
+            ref="horizontalIndicator"
+            className="ScrollView-indicator-slider"
+            style={{ width: `${this.props.width / contentSize.width * 100}%` }} />
         </View>
       </View>
     )
