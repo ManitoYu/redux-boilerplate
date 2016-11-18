@@ -13,12 +13,11 @@ export default class CollectionView extends ScrollView {
   }
 
   layout() {
-    const { collectionViewLayout, height, width } = this.props
+    const { collectionViewLayout } = this.props
 
     let layout = new collectionViewLayout.type()
 
     layout.collectionView = this
-    // layout.collectionViewContentSize = sizeMake(height, width)
     layout.itemSize = collectionViewLayout.props.itemSize
     layout.scrollDirection = collectionViewLayout.props.scrollDirection
     layout.minimumLineSpacing = collectionViewLayout.props.minimumLineSpacing
@@ -32,13 +31,15 @@ export default class CollectionView extends ScrollView {
     this.forceUpdate()
   }
 
+  componentWillMount() {
+    this._layout._initLayout(rectMake(0, 0, this.props.width, this.props.height))
+  }
+
   render() {
     const { height, width, dataSource } = this.props
     const { contentOffset } = this
 
-    this._layout._initLayout(rectMake(contentOffset.x, contentOffset.y, width, height))
     let attrs = this._layout.layoutAttributesForElements(rectMake(contentOffset.x, contentOffset.y, width, height))
-    attrs = take(attrs, dataSource.numberOfItemsInSection())
 
     let cells = attrs.map(a => {
       let cell = dataSource.cellForItemAtIndexPath(a.indexPath)

@@ -43,18 +43,23 @@ export default class CollectionViewFlowLayout extends CollectionViewLayout {
   targetContentOffset(offset, velocity) {
   }
 
+  /**
+   * @private
+   *
+   * initialize layout params
+   */
   _initLayout(rect) {
     let totalItems = this.collectionView.props.dataSource.numberOfItemsInSection()
 
     let columns = Math.floor(
       (rect.width + this.minimumInteritemSpacing) / (this.itemSize.width + this.minimumInteritemSpacing)
     )
-    let interItemSpacing = (rect.width - columns * this.itemSize.width) / (columns - 1)
+    let interItemSpacing = Math.round((rect.width - columns * this.itemSize.width) / (columns - 1))
 
     let rows = Math.floor(
       (rect.height + this.minimumLineSpacing) / (this.itemSize.height + this.minimumLineSpacing)
     )
-    let lineSpacing = (rect.height - rows * this.itemSize.height) / (rows - 1)
+    let lineSpacing = Math.round((rect.height - rows * this.itemSize.height) / (rows - 1))
 
     this.collectionViewContentSize = sizeMake(
       columns * (this.itemSize.width + interItemSpacing) - interItemSpacing,
@@ -73,7 +78,12 @@ export default class CollectionViewFlowLayout extends CollectionViewLayout {
     let attrs = Array(this._totalRows).fill().map((r, m) =>
       Array(this._columns).fill().map((c, n) => {
         if (! this._isInRect(m, n, rect)) return []
-        return this.layoutAttributesForItem({ section: 0, item: m * this._columns + n, m, n })
+        let indexPath = { section: 0, item: m * this._columns + n, m, n }
+
+        // only take a specified number of items
+        if (indexPath.item > this._totalItems - 1) return []
+
+        return this.layoutAttributesForItem(indexPath)
       })
       .reduce((a, c) => a.concat(c), [])
     )
@@ -82,6 +92,11 @@ export default class CollectionViewFlowLayout extends CollectionViewLayout {
     return attrs
   }
 
+  /**
+   * @private
+   *
+   * judge if the position is in rect
+   */
   _isInRect(m, n, rect) {
     if ((m + 1) * (this.itemSize.height + this._lineSpacing) <= rect.y) return false
     if (m * (this.itemSize.height + this._lineSpacing) >= rect.height + rect.y) return false
