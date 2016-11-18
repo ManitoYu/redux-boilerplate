@@ -6,6 +6,11 @@ import View from '../View'
 import { sizeMake, pointMake, edgeInsetsMake, pointZero } from '../Shortcuts'
 import { PanGestureRecognizer } from '../GestureRecognizer'
 import { GestureRecognizerStateEnded } from '../GestureRecognizer/constants'
+import ScrollViewIndicator from './ScrollViewIndicator'
+import {
+  ScrollViewIndicatorDirectionVertical,
+  ScrollViewIndicatorDirectionHorizontal
+} from './constants'
 
 export default class ScrollView extends View {
   static propTypes = {
@@ -191,10 +196,6 @@ export default class ScrollView extends View {
     this._contentDOMNode = ReactDOM.findDOMNode(this.refs.content)
   }
 
-  _scrollIndicator(direction, g) {
-
-  }
-
   render() {
     const { children, className, contentSize, contentInset } = this.props
 
@@ -216,24 +217,14 @@ export default class ScrollView extends View {
         <View className="ScrollView-contentView" height={contentSize.height} width={contentSize.width} ref="content">
         {children}
         </View>
-        <View className="ScrollView-indicator ScrollView-indicator--vertical">
-          <View
-            gestureRecognizers={[
-              <PanGestureRecognizer action={this._scrollIndicator.bind(this, 'vertical')} />
-            ]}
-            ref="verticalIndicator"
-            className="ScrollView-indicator-slider"
-            style={{ height: `${this.props.height / contentSize.height * 100}%` }} />
-        </View>
-        <View className="ScrollView-indicator ScrollView-indicator--horizontal">
-          <View
-            gestureRecognizers={[
-              <PanGestureRecognizer action={this._scrollIndicator.bind(this, 'horizontal')} />
-            ]}
-            ref="horizontalIndicator"
-            className="ScrollView-indicator-slider"
-            style={{ width: `${this.props.width / contentSize.width * 100}%` }} />
-        </View>
+        {/*}<ScrollViewIndicator
+          onScroll={this._handlePan.bind(this)}
+          direction={ScrollViewIndicatorDirectionVertical}
+          percent={this.props.height / contentSize.height * 100} />
+        <ScrollViewIndicator
+          onScroll={this._handlePan.bind(this)}
+          direction={ScrollViewIndicatorDirectionHorizontal}
+          percent={this.props.width / contentSize.width * 100} />*/}
       </View>
     )
   }

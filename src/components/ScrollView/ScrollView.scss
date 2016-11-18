@@ -6,37 +6,4 @@
     }
 
   }
-
-  &-indicator {
-    position: absolute;
-    background-color: rgba(0, 0, 0, .1);
-
-    &-slider {
-      background-color: #777;
-      border-radius: 4px;
-    }
-
-    &--vertical {
-      width: 8px;
-      top: 0;
-      bottom: 0;
-      right: 0;
-
-      .ScrollView-indicator-slider {
-        width: 100%;
-      }
-    }
-
-    &--horizontal {
-      height: 8px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-
-      .ScrollView-indicator-slider {
-        height: 100%;
-      }
-    }
-  }
-
 }

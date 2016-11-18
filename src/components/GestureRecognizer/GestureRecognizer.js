@@ -19,6 +19,7 @@ export default class GestureRecognizer extends Component {
   intervalSteps = this.interval
 
   touchesBegan(e) {
+    e.stopPropagation()
     this.gestureState &= ~GestureRecognizerStateEnded
     this.gestureState |= GestureRecognizerStateBegan
     this.began(e)
@@ -34,6 +35,7 @@ export default class GestureRecognizer extends Component {
   }
 
   touchesMoved(e) {
+    e.stopPropagation()
     if (! this.shouldSample()) return
     if (! (this.gestureState & GestureRecognizerStateBegan)) return
     this.gestureState |= GestureRecognizerStateChanged
@@ -43,6 +45,7 @@ export default class GestureRecognizer extends Component {
   }
 
   touchesEnded(e) {
+    e.stopPropagation()
     if (! (this.gestureState & GestureRecognizerStateBegan)) return
     if (this.gestureState & GestureRecognizerStateEnded) return
     this.gestureState &= ~GestureRecognizerStateBegan
