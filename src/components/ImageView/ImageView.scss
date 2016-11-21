@@ -2,4 +2,5 @@
 
 .ImageView {
   @extend .inline-block;
+  @extend .scale-to-fill;
 }

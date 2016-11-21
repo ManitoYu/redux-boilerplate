@@ -1,15 +1,21 @@
 @import '../../extend';
 
 .Button {
-  @extend .inline-block;
   @extend .rounded-corner;
   @extend .shadow-1dp;
+  @extend .center;
+  display: table-cell;
   min-width: 120px;
   height: 40px;
   color: #333;
   background-color: #fff;
   transition: all .4s;
+  cursor: pointer;
   // box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2);
+
+  .ImageView {
+    margin-right: .25rem;
+  }
 
   &:hover {
     @extend .shadow-5dp;
