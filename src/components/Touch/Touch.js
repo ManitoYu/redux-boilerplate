@@ -1,13 +1,40 @@
+import {
+  TouchPhaseBegan,
+  TouchPhaseMoved,
+  TouchPhaseEnded
+} from './constants'
+
+import { first, nth } from '../Shortcuts'
+
 export default class Touch {
   view = null
   window = null
   timestamp = 0
   locations = []
+  phase = TouchPhaseBegan
+  gestureRecognizers = []
 
   update(e) {
     this.timestamp = Date.now()
 
     switch (true) {
+      // wheel
+      // case e.nativeEvent instanceof WheelEvent:
+      //   if (! this.previousLocation()) {
+      //     this.locations.push({
+      //       t: this.timestamp,
+      //       x: e.pageX - e.deltaX,
+      //       y: e.pageY - e.deltaY
+      //     })
+      //     break
+      //   }
+      //
+      //   this.locations.push({
+      //     t: this.timestamp,
+      //     x: this.previousLocation().x - e.deltaX,
+      //     y: this.previousLocation().y - e.deltaY
+      //   })
+      //   break
       // mouse
       case e.nativeEvent instanceof MouseEvent:
         this.locations.push({
@@ -21,22 +48,28 @@ export default class Touch {
       case e.nativeEvent instanceof TouchEvent:
         this.locations.push({
           t: this.timestamp,
-          x: e.nativeEvent.touches[0].pageX,
-          y: e.nativeEvent.touches[0].pageY
+          x: first(e.nativeEvent.touches).pageX,
+          y: first(e.nativeEvent.touches).pageY
         })
         break
     }
+
+    this.phase = TouchPhaseMoved
+  }
+
+  leave() {
+    this.phase = TouchPhaseEnded
   }
 
   location() {
-    return this.locations[this.locations.length - 1]
+    return nth(this.locations, -1)
   }
 
   previousLocation() {
-    return this.locations[this.locations.length - 2]
+    return nth(this.locations, -2)
   }
 
   originalLocation() {
-    return this.locations[0]
+    return first(this.locations)
   }
 }

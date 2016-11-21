@@ -13,10 +13,11 @@ export default class GestureRecognizer extends Component {
     isEnabled: true
   }
 
+  action = null
   view = null
-  numberOfTouches = []
+  touches = []
+  numberOfTouches = 0
   gestureState = GestureRecognizerStatePossible
-  gestureType = null
   rads = []
   isEnabled = true
 
@@ -62,8 +63,8 @@ export default class GestureRecognizer extends Component {
 
   computeRads() {
     let ratio = this.computeRatio(
-      this.numberOfTouches[0].previousLocation(),
-      this.numberOfTouches[0].location()
+      this.touches[0].previousLocation(),
+      this.touches[0].location()
     )
 
     if (isNaN(ratio)) return 0
