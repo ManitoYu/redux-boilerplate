@@ -54,12 +54,12 @@ export default class CollectionViewFlowLayout extends CollectionViewLayout {
     let columns = Math.floor(
       (rect.width + this.minimumInteritemSpacing) / (this.itemSize.width + this.minimumInteritemSpacing)
     )
-    let interItemSpacing = Math.round((rect.width - columns * this.itemSize.width) / (columns - 1))
+    let interItemSpacing = (rect.width - columns * this.itemSize.width) / (columns - 1)
 
     let rows = Math.floor(
       (rect.height + this.minimumLineSpacing) / (this.itemSize.height + this.minimumLineSpacing)
     )
-    let lineSpacing = Math.round((rect.height - rows * this.itemSize.height) / (rows - 1))
+    let lineSpacing = (rect.height - rows * this.itemSize.height) / (rows - 1)
 
     this.collectionViewContentSize = sizeMake(
       columns * (this.itemSize.width + interItemSpacing) - interItemSpacing,

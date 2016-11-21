@@ -1,7 +1,6 @@
-import { PropTypes } from 'react'
-import View from '../View'
+import { Component, PropTypes } from 'react'
 
-export default class ViewController extends View {
+export default class ViewController extends Component {
   navigationController = null
   tabBarController = null
   presentingViewController = null

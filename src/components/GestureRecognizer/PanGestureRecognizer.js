@@ -14,12 +14,6 @@ export default class PanGestureRecognizer extends GestureRecognizer {
     y: 0
   }
 
-  constructor(action) {
-    super()
-
-    this.action = action
-  }
-
   setTranslation(translation) {
     this.translation = translation
   }

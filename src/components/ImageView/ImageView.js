@@ -13,7 +13,8 @@ import {
 export default class ImageView extends View {
   static defaultProps = {
     image: <Image />,
-    contentMode: ImageViewContentModeFit
+    contentMode: ImageViewContentModeFit,
+    isUserInteractionEnabled: false
   }
 
   static propTypes = {

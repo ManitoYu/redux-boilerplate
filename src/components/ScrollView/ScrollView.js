@@ -120,7 +120,7 @@ export default class ScrollView extends View {
     _contentDOMNode.style.right = ''
 
     // stop gesture
-    if (g.gestureState & GestureRecognizerStateEnded) {
+    if (g.gestureState == GestureRecognizerStateEnded) {
       // add bounce effect
       _contentDOMNode.classList.add('is-animated')
 
@@ -205,7 +205,6 @@ export default class ScrollView extends View {
     if (contentInset.right) style.paddingRight = contentInset.right
     if (contentInset.bottom) style.paddingBottom = contentInset.bottom
     if (contentInset.left) style.paddingLeft = contentInset.left
-
 
     return (
       <View

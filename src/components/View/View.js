@@ -1,24 +1,24 @@
 import React, { PropTypes } from 'react'
 import classnames from 'classnames'
 import Responder from '../Responder'
-import { rectMake } from '../Shortcuts'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-import { time } from 'core-decorators'
 
 export default class View extends Responder {
   static defaultProps = {
-    frame: rectMake(null, null, null, null),
     clipsToBounds: false,
     isHidden: false,
     gestureRecognizers: [],
     position: '',
-    style: {}
+    style: {},
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    isUserInteractionEnabled: true
   }
 
   static propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,
-    frame: PropTypes.object,
     x: PropTypes.number,
     y: PropTypes.number,
     width: PropTypes.number,
@@ -27,7 +27,8 @@ export default class View extends Responder {
     isHidden: PropTypes.bool,
     gestureRecognizers: PropTypes.array,
     position: PropTypes.string,
-    style: PropTypes.object
+    style: PropTypes.object,
+    isUserInteractionEnabled: PropTypes.bool
   }
 
   render() {
@@ -36,12 +37,13 @@ export default class View extends Responder {
       className,
       clipsToBounds,
       isHidden,
+      position,
+      style,
       x,
       y,
       width,
       height,
-      position,
-      style
+      isUserInteractionEnabled
     } = this.props
 
     let finalStyle = { ...style }
@@ -56,6 +58,7 @@ export default class View extends Responder {
     if (clipsToBounds) finalStyle.overflow = 'hidden'
     if (isHidden) finalStyle.display = 'none'
     if (position) finalStyle.position = position
+    if (! isUserInteractionEnabled) finalStyle.pointerEvents = 'none'
 
     return (
       <Responder {...this.props}>

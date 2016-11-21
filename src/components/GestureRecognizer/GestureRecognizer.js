@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {
+  GestureRecognizerStatePossible,
   GestureRecognizerStateBegan,
   GestureRecognizerStateChanged,
   GestureRecognizerStateEnded
@@ -8,20 +9,27 @@ import {
 import { time } from 'core-decorators'
 
 export default class GestureRecognizer extends Component {
+  static defaultProps = {
+    isEnabled: true
+  }
+
   view = null
   numberOfTouches = []
-  gestureState = 0
+  gestureState = GestureRecognizerStatePossible
   gestureType = null
   rads = []
+  isEnabled = true
 
   // frequency control
   interval = 1
   intervalSteps = this.interval
 
   touchesBegan(e) {
+    if (! this.isEnabled) return
     e.stopPropagation()
-    this.gestureState &= ~GestureRecognizerStateEnded
-    this.gestureState |= GestureRecognizerStateBegan
+    this.gestureState = GestureRecognizerStateBegan
+    // this.gestureState &= ~GestureRecognizerStateEnded
+    // this.gestureState |= GestureRecognizerStateBegan
     this.began(e)
   }
 
@@ -37,8 +45,8 @@ export default class GestureRecognizer extends Component {
   touchesMoved(e) {
     e.stopPropagation()
     if (! this.shouldSample()) return
-    if (! (this.gestureState & GestureRecognizerStateBegan)) return
-    this.gestureState |= GestureRecognizerStateChanged
+    if (this.gestureState == GestureRecognizerStatePossible) return
+    if (this.gestureState == GestureRecognizerStateEnded) return
     this.moved(e)
     this.evaluate() && this.action(this)
     if (e.buttons == 0) this.touchesEnded(e)
@@ -46,14 +54,10 @@ export default class GestureRecognizer extends Component {
 
   touchesEnded(e) {
     e.stopPropagation()
-    if (! (this.gestureState & GestureRecognizerStateBegan)) return
-    if (this.gestureState & GestureRecognizerStateEnded) return
-    this.gestureState &= ~GestureRecognizerStateBegan
-    this.gestureState &= ~GestureRecognizerStateChanged
-    this.gestureState |= GestureRecognizerStateEnded
+    this.gestureState = GestureRecognizerStateEnded
     this.ended(e)
     this.action(this)
-    this.rads = []
+    this.reset()
   }
 
   computeRads() {
@@ -75,8 +79,11 @@ export default class GestureRecognizer extends Component {
   }
 
   evaluate() {
+    this.gestureState = GestureRecognizerStatePossible
     this.computeRads()
-    return this.estimate()
+    let isChanged = this.estimate()
+    this.gestureState = GestureRecognizerStateChanged
+    return isChanged
   }
 
   began() {
@@ -86,6 +93,11 @@ export default class GestureRecognizer extends Component {
   }
 
   ended() {
+  }
+
+  reset() {
+    this.rads = []
+    this.gestureState = GestureRecognizerStatePossible
   }
 
   estimate() {
