@@ -46,7 +46,9 @@ export default class PanGestureRecognizer extends GestureRecognizer {
   }
 
   ended(e) {
-    this.touches[0].leave()
+    if (! first(this.touches)) return
+    first(this.touches).leave()
+    this.touches = []
     this.numberOfTouches = 0
     // this.moved(e)
   }

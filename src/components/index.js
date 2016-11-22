@@ -13,7 +13,7 @@ import NavigationController from './NavigationController'
 import Window from './Window'
 import TabBarController from './TabBarController'
 import NavigationBar from './NavigationBar'
-import Control from './Control'
+import Control, { ControlEvent } from './Control'
 import TabBar from './TabBar'
 import Label from './Label'
 import BarItem from './BarItem'
@@ -62,6 +62,7 @@ export {
   Window,
   NavigationBar,
   Control,
+  ControlEvent,
   TabBar,
   Label,
   BarItem,

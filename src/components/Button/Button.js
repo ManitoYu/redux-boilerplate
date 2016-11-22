@@ -18,6 +18,7 @@ export default class Button extends Control {
     const { children, state } = this.props
     if (children.every(c => c.type == Button)) {
       let button = first(children.filter(b => b.props.state == state))
+      this._actions = button.props.actions
       return [
         button.props.image &&
           <ImageView
@@ -35,12 +36,14 @@ export default class Button extends Control {
   }
 
   _handleChildrenIsString() {
-    const { children } = this.props
+    const { children, actions } = this.props
+    this._actions = actions
     return <Label>{children}</Label>
   }
 
   _handleChildrenIsUndefined() {
-    const { image, title } = this.props
+    const { image, title, actions } = this.props
+    this._actions = actions
     return [
       image &&
         <ImageView
@@ -72,6 +75,7 @@ export default class Button extends Control {
       <Control
         {...this.props}
         className={classnames('Button', className)}
+        actions={this._actions}
         style={style}
         onClick={onClick}>
         {contentView}

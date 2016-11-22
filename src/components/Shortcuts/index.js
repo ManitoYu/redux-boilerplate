@@ -9,3 +9,4 @@ export const takeRight = (array, number) => array.slice(array.length - number)
 export const first = array => array[0]
 export const size = array => array.length
 export const nth = (array, index) => index >= 0 ? array[index] : array[array.length + index]
+export const set = (o, k, v) => { o[k] = v; return o }

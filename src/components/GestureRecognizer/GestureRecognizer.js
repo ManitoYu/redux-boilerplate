@@ -6,6 +6,8 @@ import {
   GestureRecognizerStateEnded
 } from './constants'
 
+import { first } from '../Shortcuts'
+
 import { time } from 'core-decorators'
 
 export default class GestureRecognizer extends Component {
@@ -25,15 +27,6 @@ export default class GestureRecognizer extends Component {
   interval = 1
   intervalSteps = this.interval
 
-  touchesBegan(e) {
-    if (! this.isEnabled) return
-    e.stopPropagation()
-    this.gestureState = GestureRecognizerStateBegan
-    // this.gestureState &= ~GestureRecognizerStateEnded
-    // this.gestureState |= GestureRecognizerStateBegan
-    this.began(e)
-  }
-
   shouldSample() {
     if (this.intervalSteps > 0) {
       this.intervalSteps --
@@ -41,6 +34,14 @@ export default class GestureRecognizer extends Component {
     }
     this.intervalSteps = this.interval
     return true
+  }
+
+  touchesBegan(e) {
+    if (! this.isEnabled) return
+    e.stopPropagation()
+    this.gestureState = GestureRecognizerStateBegan
+    this.began(e)
+    this.evaluate() && this.action(this)
   }
 
   touchesMoved(e) {
@@ -63,8 +64,8 @@ export default class GestureRecognizer extends Component {
 
   computeRads() {
     let ratio = this.computeRatio(
-      this.touches[0].previousLocation(),
-      this.touches[0].location()
+      first(this.touches).previousLocation(),
+      first(this.touches).location()
     )
 
     if (isNaN(ratio)) return 0
@@ -106,7 +107,7 @@ export default class GestureRecognizer extends Component {
 
   render() {
     return (
-      <div></div>
+      <div />
     )
   }
 }
