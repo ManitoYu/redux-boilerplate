@@ -15,7 +15,7 @@ export default class Responder extends Component {
   constructor(props) {
     super(props)
 
-    if (props.gestureRecognizers) {
+    if (props.gestureRecognizers && size(props.gestureRecognizers)) {
       this._gestureRecognizers = props.gestureRecognizers.map(g => {
         let gestureRecognizer = new g.type()
         gestureRecognizer.action = g.props.action
@@ -39,22 +39,21 @@ export default class Responder extends Component {
 
   @autobind
   touchesBegan(e) {
-    if (e.nativeEvent instanceof MouseEvent) {
+    // if (e.nativeEvent instanceof MouseEvent) {
       let touch = new Touch()
       touch.update(e)
       this._touches = [touch]
-    }
+    // }
 
     this._gestureRecognizers.map(g => g.touchesBegan(this._touches, e))
   }
 
   @autobind
   touchesMoved(e) {
-    console.log(size(this._touches))
-    // if (size(this._touches) > 0) {
-    //   let touch = first(this._touches)
-    //   touch.update(e)
-    // }
+    if (size(this._touches) > 0) {
+      let touch = first(this._touches)
+      touch.update(e)
+    }
 
     this._gestureRecognizers.map(g => g.touchesMoved(this._touches, e))
   }
@@ -62,6 +61,7 @@ export default class Responder extends Component {
   @autobind
   touchesEnded(e) {
     this._gestureRecognizers.map(g => g.touchesEnded(this._touches, e))
+    this._touches = []
   }
 
   render() {

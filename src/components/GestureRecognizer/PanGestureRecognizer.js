@@ -20,7 +20,6 @@ export default class PanGestureRecognizer extends GestureRecognizer {
   @override
   moved(touches, e) {
     let touch = first(touches)
-    touch.update(e)
 
     let prevLocation = touch.previousLocation()
     let curLocation = touch.location()
