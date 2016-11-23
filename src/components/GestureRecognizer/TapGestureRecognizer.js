@@ -9,6 +9,7 @@ export default class TapGestureRecognizer extends GestureRecognizer {
   }
 
   ended(touches, e) {
+    if (! first(touches)) return
     first(touches).leave()
     this.numberOfTouches = 0
     // this.moved(e)

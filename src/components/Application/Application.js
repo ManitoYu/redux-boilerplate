@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-import View from '../View'
+import Responder from '../Responder'
 
-export default class Application extends Component {
+export default class Application extends Responder {
   keyWindow = null
   windows = []
   presentedViewController = null
@@ -37,15 +37,17 @@ export default class Application extends Component {
 
   render() {
     return (
-      <View className="Application">
-        {this.keyWindow}
-        <ReactCSSTransitionGroup
-          transitionName="modal"
-          transitionEnterTimeout={800}
-          transitionLeaveTimeout={800}>
-          {this.presentedViewController}
-        </ReactCSSTransitionGroup>
-      </View>
+      <Responder>
+        <div className="Application">
+          {this.keyWindow}
+          <ReactCSSTransitionGroup
+            transitionName="modal"
+            transitionEnterTimeout={800}
+            transitionLeaveTimeout={800}>
+            {this.presentedViewController}
+          </ReactCSSTransitionGroup>
+        </div>
+      </Responder>
     )
   }
 }

@@ -70,17 +70,21 @@ export default class Control extends View {
   @autobind
   _handleTap(g) {
     if (g.gestureState == GestureRecognizerStateEnded) {
-      this.actions(ControlEventsTouchDown).forEach(action => action(g))
+      this.actions(ControlEventsTouchDown).forEach(action => action())
     }
 
     if (g.gestureState == GestureRecognizerStateEnded) {
-      this.actions(ControlEventsTouchUpInside).forEach(action => action(g))
+      this.actions(ControlEventsTouchUpInside).forEach(action => action())
     }
   }
 
   @autobind
-  _handlePan() {
+  _handlePan(g) {
 
+    if (g.gestureState == GestureRecognizerStateChanged) {
+      console.log(g.gestureState)
+      
+    }
   }
 
   render() {

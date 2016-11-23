@@ -52,6 +52,11 @@ export default class PanGestureRecognizer extends GestureRecognizer {
 
   evaluate(touches) {
     let touch = first(touches)
-    return touch.rads.reduce((a, v) => a += v / size(touch.rads), 0) < .5
+    let avgRads = touch.rads.reduce((a, v) => a += v / size(touch.rads), 0)
+
+    // no any movements
+    if (avgRads == 0) return false
+
+    return avgRads < .5
   }
 }
