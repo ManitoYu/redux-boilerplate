@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react'
+import { first, size } from '../Shortcuts'
+import { autobind, time } from 'core-decorators'
+import Touch from '../Touch'
 
 export default class Responder extends Component {
   static propTypes = {
@@ -7,6 +10,7 @@ export default class Responder extends Component {
 
   _gestureRecognizers = []
   events = {}
+  _touches = []
 
   constructor(props) {
     super(props)
@@ -21,16 +25,43 @@ export default class Responder extends Component {
       })
 
       this.events = {
-        onMouseDown: e => this._gestureRecognizers.map(g => g.touchesBegan(e)),
-        onMouseMove: e => this._gestureRecognizers.map(g => g.touchesMoved(e)),
+        onMouseDown: this.touchesBegan,
+        onMouseMove: this.touchesMoved,
+        onMouseUp: this.touchesEnded,
         // onMouseOut: e => this._gestureRecognizers.map(g => g.touchesMoved(e)),
-        onMouseUp: e => this._gestureRecognizers.map(g => g.touchesEnded(e)),
-        onTouchStart: e => this._gestureRecognizers.map(g => g.touchesBegan(e)),
-        onTouchMove: e => this._gestureRecognizers.map(g => g.touchesMoved(e)),
-        onTouchEnd: e => this._gestureRecognizers.map(g => g.touchesEnded(e))
+        onTouchStart: this.touchesBegan,
+        onTouchMove: this.touchesMoved,
+        onTouchEnd: this.touchesEnded
         // onWheel: e => this._gestureRecognizers.map(g => g.numberOfTouches == 0 ? g.touchesBegan(e) : g.touchesMoved(e))
       }
     }
+  }
+
+  @autobind
+  touchesBegan(e) {
+    if (e.nativeEvent instanceof MouseEvent) {
+      let touch = new Touch()
+      touch.update(e)
+      this._touches = [touch]
+    }
+
+    this._gestureRecognizers.map(g => g.touchesBegan(this._touches, e))
+  }
+
+  @autobind
+  touchesMoved(e) {
+    console.log(size(this._touches))
+    // if (size(this._touches) > 0) {
+    //   let touch = first(this._touches)
+    //   touch.update(e)
+    // }
+
+    this._gestureRecognizers.map(g => g.touchesMoved(this._touches, e))
+  }
+
+  @autobind
+  touchesEnded(e) {
+    this._gestureRecognizers.map(g => g.touchesEnded(this._touches, e))
   }
 
   render() {

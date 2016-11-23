@@ -17,10 +17,8 @@ export default class GestureRecognizer extends Component {
 
   action = null
   view = null
-  touches = []
   numberOfTouches = 0
   gestureState = GestureRecognizerStatePossible
-  rads = []
   isEnabled = true
 
   // frequency control
@@ -36,78 +34,52 @@ export default class GestureRecognizer extends Component {
     return true
   }
 
-  touchesBegan(e) {
+  touchesBegan(touches, e) {
     if (! this.isEnabled) return
     e.stopPropagation()
     this.gestureState = GestureRecognizerStateBegan
-    this.began(e)
-    this.evaluate() && this.action(this)
+    this.began(touches, e)
+    this.evaluate(touches) && this.action(this)
   }
 
-  touchesMoved(e) {
+  touchesMoved(touches, e) {
     e.stopPropagation()
     if (! this.shouldSample()) return
     if (this.gestureState == GestureRecognizerStatePossible) return
     if (this.gestureState == GestureRecognizerStateEnded) return
-    this.moved(e)
-    this.evaluate() && this.action(this)
-    if (e.buttons == 0) this.touchesEnded(e)
+
+    this.moved(touches, e)
+
+    this.gestureState = GestureRecognizerStatePossible
+    let isChanged = this.evaluate(touches)
+    this.gestureState = GestureRecognizerStateChanged
+    isChanged && this.action(this)
+
+    if (e.buttons == 0) this.touchesEnded(touches, e)
   }
 
-  touchesEnded(e) {
+  touchesEnded(touches, e) {
     e.stopPropagation()
     this.gestureState = GestureRecognizerStateEnded
-    this.ended(e)
+    this.ended(touches, e)
     this.action(this)
     this.reset()
   }
 
-  computeRads() {
-    let ratio = this.computeRatio(
-      first(this.touches).previousLocation(),
-      first(this.touches).location()
-    )
-
-    if (isNaN(ratio)) return 0
-
-    if (ratio == Infinity) this.rads.push(0.5) // 向下90度
-    if (ratio == -Infinity) this.rads.push(-0.5) // 向上90度
-    this.rads.push(Math.tanh(ratio) / Math.PI)
+  began(touches, e) {
   }
 
-  computeRatio(a, b) {
-    if (! a || ! b) return NaN
-    return (b.y - a.y) / (b.x - a.x)
+  moved(touches, e) {
   }
 
-  evaluate() {
-    this.gestureState = GestureRecognizerStatePossible
-    this.computeRads()
-    let isChanged = this.estimate()
-    this.gestureState = GestureRecognizerStateChanged
-    return isChanged
-  }
-
-  began() {
-  }
-
-  moved() {
-  }
-
-  ended() {
+  ended(touches, e) {
   }
 
   reset() {
-    this.rads = []
     this.gestureState = GestureRecognizerStatePossible
   }
 
-  estimate() {
-  }
-
   render() {
-    return (
-      <div />
-    )
+    return <div />
   }
 }

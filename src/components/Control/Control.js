@@ -69,7 +69,7 @@ export default class Control extends View {
 
   @autobind
   _handleTap(g) {
-    if (g.gestureState == GestureRecognizerStateChanged) {
+    if (g.gestureState == GestureRecognizerStateEnded) {
       this.actions(ControlEventsTouchDown).forEach(action => action(g))
     }
 

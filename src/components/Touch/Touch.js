@@ -13,8 +13,10 @@ export default class Touch {
   locations = []
   phase = TouchPhaseBegan
   gestureRecognizers = []
+  rads = []
 
   update(e) {
+    this.phase = TouchPhaseMoved
     this.timestamp = Date.now()
 
     switch (true) {
@@ -54,11 +56,12 @@ export default class Touch {
         break
     }
 
-    this.phase = TouchPhaseMoved
+    this._computeRads()
   }
 
   leave() {
     this.phase = TouchPhaseEnded
+    this.rads = []
   }
 
   location() {
@@ -71,5 +74,23 @@ export default class Touch {
 
   originalLocation() {
     return first(this.locations)
+  }
+
+  _computeRads() {
+    let ratio = this._computeRatio(
+      this.previousLocation(),
+      this.location()
+    )
+
+    if (isNaN(ratio)) return 0
+
+    if (ratio == Infinity) this.rads.push(0.5) // 向下90度
+    if (ratio == -Infinity) this.rads.push(-0.5) // 向上90度
+    this.rads.push(Math.tanh(ratio) / Math.PI)
+  }
+
+  _computeRatio(a, b) {
+    if (! a || ! b) return NaN
+    return (b.y - a.y) / (b.x - a.x)
   }
 }
