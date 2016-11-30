@@ -8,9 +8,12 @@ export default class Responder extends Component {
     children: PropTypes.node
   }
 
+  static contextTypes = {
+    application: PropTypes.object
+  }
+
   _gestureRecognizers = []
   events = {}
-  _touches = []
 
   constructor(props) {
     super(props)
@@ -25,41 +28,46 @@ export default class Responder extends Component {
       })
 
       this.events = {
-        onMouseDown: this.touchesBegan,
-        onMouseMove: this.touchesMoved,
-        onMouseUp: this.touchesEnded,
-        onTouchStart: this.touchesBegan,
-        onTouchMove: this.touchesMoved,
-        onTouchEnd: this.touchesEnded
+        onMouseDownCapture: this.touchesBegan,
+        onMouseMoveCapture: this.touchesMoved,
+        onMouseUpCapture: this.touchesEnded,
+        onMouseLeave: this.touchesMovedLeave,
+        onMouseEnter: this.touchesMovedEnter,
+        onTouchStartCapture: this.touchesBegan,
+        onTouchMoveCapture: this.touchesMoved,
+        onTouchEndCapture: this.touchesEnded
       }
     }
+
+    if (! this.events.onMouseDownCapture) this.events.onMouseDownCapture = this.props.touchesBegan
+    if (! this.events.onMouseMoveCapture) this.events.onMouseMoveCapture = this.props.touchesMoved
+    if (! this.events.onMouseUpCapture) this.events.onMouseUpCapture = this.props.touchesEnded
   }
 
   @autobind
   touchesBegan(e) {
-    // if (e.nativeEvent instanceof MouseEvent) {
-      let touch = new Touch()
-      touch.update(e)
-      this._touches = [touch]
-    // }
-
-    this._gestureRecognizers.map(g => g.touchesBegan(this._touches, e))
+    this._gestureRecognizers.map(g => g.touchesBegan(this.context.application._touches, e))
   }
 
   @autobind
   touchesMoved(e) {
-    if (size(this._touches) > 0) {
-      let touch = first(this._touches)
-      touch.update(e)
-    }
-
-    this._gestureRecognizers.map(g => g.touchesMoved(this._touches, e))
+    if (size(this.context.application._gestureRecognizers)) return
+    this._gestureRecognizers.map(g => g.touchesMoved(this.context.application._touches, e))
   }
 
   @autobind
   touchesEnded(e) {
-    this._gestureRecognizers.map(g => g.touchesEnded(this._touches, e))
-    this._touches = []
+    this._gestureRecognizers.map(g => g.touchesEnded(this.context.application._touches, e))
+  }
+
+  @autobind
+  touchesMovedLeave(e) {
+    this.context.application._gestureRecognizers = this._gestureRecognizers
+  }
+
+  @autobind
+  touchesMovedEnter(e) {
+    this.context.application._gestureRecognizers = []
   }
 
   render() {

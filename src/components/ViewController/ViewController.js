@@ -8,7 +8,8 @@ export default class ViewController extends Component {
 
   static contextTypes = {
     present: PropTypes.func,
-    dismiss: PropTypes.func
+    dismiss: PropTypes.func,
+    touches: PropTypes.array
   }
 
   constructor(props) {

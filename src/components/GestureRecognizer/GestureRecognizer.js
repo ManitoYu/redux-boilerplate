@@ -6,7 +6,7 @@ import {
   GestureRecognizerStateEnded
 } from './constants'
 
-import { first } from '../Shortcuts'
+import { first, size } from '../Shortcuts'
 import { time } from 'core-decorators'
 
 export default class GestureRecognizer extends Component {
@@ -46,7 +46,6 @@ export default class GestureRecognizer extends Component {
     // if (! this.shouldSample()) return
     if (this.gestureState == GestureRecognizerStatePossible) return
     if (this.gestureState == GestureRecognizerStateEnded) return
-
     this.moved(touches, e)
 
     this.gestureState = GestureRecognizerStatePossible
