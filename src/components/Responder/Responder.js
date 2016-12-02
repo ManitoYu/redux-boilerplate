@@ -51,22 +51,27 @@ export default class Responder extends Component {
 
   @autobind
   touchesMoved(e) {
-    if (size(this.context.application._gestureRecognizers)) return
     this._gestureRecognizers.map(g => g.touchesMoved(this.context.application._touches, e))
   }
 
   @autobind
   touchesEnded(e) {
     this._gestureRecognizers.map(g => g.touchesEnded(this.context.application._touches, e))
+    this.context.application._gestureRecognizers = []
+    this.context.application._touches = []
   }
 
   @autobind
   touchesMovedLeave(e) {
+    if (! size(this.context.application._touches)) return
+    if (size(this.context.application._gestureRecognizers)) return
     this.context.application._gestureRecognizers = this._gestureRecognizers
   }
 
   @autobind
   touchesMovedEnter(e) {
+    if (! size(this.context.application._touches)) return
+    if (this.context.application._gestureRecognizers != this._gestureRecognizers) return
     this.context.application._gestureRecognizers = []
   }
 

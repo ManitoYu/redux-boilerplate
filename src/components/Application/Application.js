@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import Responder from '../Responder'
-import { autobind } from 'core-decorators'
+import { autobind, time } from 'core-decorators'
 import { size, first } from '../Shortcuts'
 import Touch from '../Touch'
 
@@ -54,18 +54,29 @@ export default class Application extends Responder {
 
   @autobind
   touchesMoved(e) {
-    if (size(this._touches) > 0) {
-      let touch = first(this._touches)
-      touch.update(e)
+    if (! size(this._touches)) {
+      e.stopPropagation()
+      return
     }
-    this._gestureRecognizers.map(g => g.touchesMoved(this._touches, e))
+
+    let touch = first(this._touches)
+    touch.update(e)
+
+    if (size(this._gestureRecognizers)) {
+      e.stopPropagation()
+      this._gestureRecognizers.map(g => g.touchesMoved(this._touches, e))
+      if (! e.buttons) this.touchesEnded(e)
+    }
   }
 
   @autobind
   touchesEnded(e) {
-    this._gestureRecognizers.map(g => g.touchesEnded(this._touches, e))
-    this._gestureRecognizers = []
-    this._touches = []
+    if (size(this._gestureRecognizers)) {
+      e.stopPropagation()
+      this._gestureRecognizers.map(g => g.touchesEnded(this._touches, e))
+      this._gestureRecognizers = []
+      this._touches = []
+    }
   }
 
   render() {
