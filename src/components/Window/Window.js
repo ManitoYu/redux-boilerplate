@@ -6,13 +6,9 @@ export default class Window extends View {
     rootViewController: PropTypes.element
   }
 
-  static contextTypes = {
-    touches: PropTypes.array
-  }
-
   render() {
     const { rootViewController } = this.props
-    
+
     return (
       <View className="Window">
       {rootViewController}

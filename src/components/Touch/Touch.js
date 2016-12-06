@@ -61,7 +61,6 @@ export default class Touch {
 
   leave() {
     this.phase = TouchPhaseEnded
-    this.rads = []
   }
 
   location() {

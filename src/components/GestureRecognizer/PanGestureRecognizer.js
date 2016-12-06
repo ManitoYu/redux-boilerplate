@@ -12,8 +12,7 @@ export default class PanGestureRecognizer extends GestureRecognizer {
 
   @override
   began(touches, e) {
-    let touch = first(touches)
-    touch.gestureRecognizers.push(this)
+    first(touches).gestureRecognizers.push(this)
     this.numberOfTouches = 1
   }
 
@@ -57,6 +56,7 @@ export default class PanGestureRecognizer extends GestureRecognizer {
     // XXX no any movements
     // if (avgRads == 0) return false
 
+    if (size(touch.rads) == 0) return false
     return avgRads < .5
   }
 }

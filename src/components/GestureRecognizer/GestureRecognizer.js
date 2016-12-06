@@ -35,15 +35,13 @@ export default class GestureRecognizer extends Component {
 
   touchesBegan(touches, e) {
     if (! this.isEnabled) return
-    // e.stopPropagation()
     this.gestureState = GestureRecognizerStateBegan
     this.began(touches, e)
     this.evaluate(touches) && this.action(this)
   }
 
   touchesMoved(touches, e) {
-    // e.stopPropagation()
-    // if (! this.shouldSample()) return
+    if (! this.isEnabled) return
     if (this.gestureState == GestureRecognizerStatePossible) return
     if (this.gestureState == GestureRecognizerStateEnded) return
     this.moved(touches, e)
@@ -53,12 +51,10 @@ export default class GestureRecognizer extends Component {
       this.gestureState = GestureRecognizerStateChanged
       this.action(this)
     }
-
-    if (e.buttons == 0) this.touchesEnded(touches, e)
   }
 
   touchesEnded(touches, e) {
-    // e.stopPropagation()
+    if (! this.isEnabled) return
     this.gestureState = GestureRecognizerStateEnded
     this.ended(touches, e)
     this.action(this)

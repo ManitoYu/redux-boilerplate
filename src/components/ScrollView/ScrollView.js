@@ -40,6 +40,7 @@ export default class ScrollView extends View {
   contentOffset = pointMake(0, 0)
   maxContentOffset = pointMake(0, 0)
   _contentDOMNode = null
+  isDragging = false
 
   @lazyInitialize panGestureRecognizer = (
     <PanGestureRecognizer action={this._handlePan.bind(this)}/>
@@ -83,6 +84,8 @@ export default class ScrollView extends View {
 
     if (! isScrollEnabled) return
 
+    this.isDragging = true
+
     /**
      * next translation
      *
@@ -118,9 +121,13 @@ export default class ScrollView extends View {
     _contentDOMNode.style.bottom = ''
     _contentDOMNode.style.left = ''
     _contentDOMNode.style.right = ''
+    _contentDOMNode.style.webkitUserSelect = 'none'
 
     // stop gesture
     if (g.gestureState == GestureRecognizerStateEnded) {
+      this.isDragging = false
+      _contentDOMNode.style.webkitUserSelect = ''
+
       // add bounce effect
       _contentDOMNode.classList.add('is-animated')
 
@@ -213,7 +220,10 @@ export default class ScrollView extends View {
         clipsToBounds={true}
         style={style}
         {...this.props}>
-        <View className="ScrollView-contentView" height={contentSize.height} width={contentSize.width} ref="content">
+        <View className="ScrollView-contentView"
+          clipsToBounds={true}
+          height={contentSize.height}
+          width={contentSize.width} ref="content">
         {children}
         </View>
         {/*}<ScrollViewIndicator

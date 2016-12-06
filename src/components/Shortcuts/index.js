@@ -10,3 +10,4 @@ export const first = array => array[0]
 export const size = array => array.length
 export const nth = (array, index) => index >= 0 ? array[index] : array[array.length + index]
 export const set = (o, k, v) => { o[k] = v; return o }
+export const defaults = (o, a) => { for (let k in a) set(o, k, o[k] || a[k]); return o }
