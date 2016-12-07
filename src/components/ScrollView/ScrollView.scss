@@ -1,4 +1,9 @@
 .ScrollView {
+
+  &.is-dragging {
+    user-select: none;
+  }
+
   &-contentView {
 
     &.is-animated {

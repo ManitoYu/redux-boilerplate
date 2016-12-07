@@ -3,4 +3,8 @@
 .Application {
   @extend .scale-to-fill;
   position: fixed;
+
+  &.is-tracking {
+    user-select: none;
+  }
 }

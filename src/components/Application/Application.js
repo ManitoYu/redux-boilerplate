@@ -8,7 +8,9 @@ import classnames from 'classnames'
 import {
   ApplicationStateActive,
   ApplicationStateInactive,
-  ApplicationStateBackground
+  ApplicationStateBackground,
+  ApplicationRunModeDefault,
+  ApplicationRunModeTracking
 } from './constants'
 
 export default class Application extends Responder {
@@ -16,6 +18,7 @@ export default class Application extends Responder {
   windows = []
   presentedViewController = null
   applicationState = ApplicationStateInactive
+  currentRunMode = ApplicationRunModeDefault
   _touches = []
 
   static childContextTypes = {
@@ -61,6 +64,13 @@ export default class Application extends Responder {
     this._gestureRecognizers.map(g => g.touchesBegan(this._touches, e))
   }
 
+  /**
+   * there is a strange bug
+   *
+   * When you scroll the scrollview, it will be jammed on next scrolling once you
+   * moved mouse into another element.
+   * The bug disappears in Firefox, but appears in Chrome.
+   */
   @autobind
   touchesMoved(e) {
     e.stopPropagation()
@@ -82,13 +92,18 @@ export default class Application extends Responder {
     this.applicationState = ApplicationStateInactive
   }
 
+  _runMode(mode) {
+    this.currentRunMode = mode
+    this.forceUpdate()
+  }
+
   render() {
     return (
       <Responder
         touchesBegan={this.touchesBegan}
         touchesMoved={this.touchesMoved}
         touchesEnded={this.touchesEnded}>
-        <div className="Application">
+        <div className={classnames('Application', { 'is-tracking': this.currentRunMode == ApplicationRunModeTracking })}>
           {this.keyWindow}
           <ReactCSSTransitionGroup
             transitionName="modal"

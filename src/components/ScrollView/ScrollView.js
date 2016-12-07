@@ -5,12 +5,21 @@ import { lazyInitialize } from 'core-decorators'
 import View from '../View'
 import { sizeMake, pointMake, edgeInsetsMake, pointZero } from '../Shortcuts'
 import { PanGestureRecognizer } from '../GestureRecognizer'
-import { GestureRecognizerStateEnded } from '../GestureRecognizer/constants'
+import {
+  GestureRecognizerStateBegan,
+  GestureRecognizerStateChanged,
+  GestureRecognizerStateEnded
+} from '../GestureRecognizer/constants'
 import ScrollViewIndicator from './ScrollViewIndicator'
 import {
   ScrollViewIndicatorDirectionVertical,
   ScrollViewIndicatorDirectionHorizontal
 } from './constants'
+
+import {
+  ApplicationRunModeDefault,
+  ApplicationRunModeTracking
+} from '../Application/constants'
 
 export default class ScrollView extends View {
   static propTypes = {
@@ -37,10 +46,15 @@ export default class ScrollView extends View {
     alwaysBounceVertical: true
   }
 
+  static contextTypes = {
+    application: PropTypes.object
+  }
+
   contentOffset = pointMake(0, 0)
   maxContentOffset = pointMake(0, 0)
   _contentDOMNode = null
   isDragging = false
+  isTracking = false
 
   @lazyInitialize panGestureRecognizer = (
     <PanGestureRecognizer action={this._handlePan.bind(this)}/>
@@ -84,7 +98,16 @@ export default class ScrollView extends View {
 
     if (! isScrollEnabled) return
 
-    this.isDragging = true
+    this.isDragging = g.gestureState == GestureRecognizerStateChanged
+    this.isTracking = g.gestureState == GestureRecognizerStateBegan
+
+    if (this.isTracking) {
+      this.context.application._runMode(ApplicationRunModeTracking)
+    }
+
+    if (! this.isTracking && ! this.isDragging) {
+      this.context.application._runMode(ApplicationRunModeDefault)
+    }
 
     /**
      * next translation
@@ -121,13 +144,9 @@ export default class ScrollView extends View {
     _contentDOMNode.style.bottom = ''
     _contentDOMNode.style.left = ''
     _contentDOMNode.style.right = ''
-    _contentDOMNode.style.webkitUserSelect = 'none'
 
     // stop gesture
     if (g.gestureState == GestureRecognizerStateEnded) {
-      this.isDragging = false
-      _contentDOMNode.style.webkitUserSelect = ''
-
       // add bounce effect
       _contentDOMNode.classList.add('is-animated')
 
